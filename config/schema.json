@@ -1,0 +1,817 @@
+{
+  "schema_version": "1.0.0",
+  "schema_metadata": {
+    "title": "DinoAir Configuration Schema",
+    "description": "Comprehensive configuration schema for DinoAir application with validation rules and defaults",
+    "created": "2025-09-16",
+    "maintainer": "DinoAir Development Team"
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["app"],
+  "properties": {
+    "app": {
+      "type": "object",
+      "description": "Core application settings",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Application name",
+          "default": "DinoAir 2.0",
+          "env_var": "APP_NAME",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "version": {
+          "type": "string",
+          "description": "Application version (semantic versioning)",
+          "default": "2.0.0",
+          "env_var": "APP_VERSION",
+          "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9-.]+)?$"
+        },
+        "debug": {
+          "type": "boolean",
+          "description": "Enable debug mode",
+          "default": false,
+          "env_var": "DEBUG"
+        },
+        "theme": {
+          "type": "string",
+          "description": "UI theme preference",
+          "default": "light",
+          "env_var": "APP_THEME",
+          "enum": ["light", "dark", "auto"]
+        },
+        "auto_save": {
+          "type": "boolean",
+          "description": "Enable automatic saving",
+          "default": true,
+          "env_var": "AUTO_SAVE"
+        },
+        "backup_interval": {
+          "type": "integer",
+          "description": "Backup interval in seconds",
+          "default": 300,
+          "env_var": "BACKUP_INTERVAL",
+          "minimum": 60,
+          "maximum": 86400
+        },
+        "disable_watchdog": {
+          "type": "boolean",
+          "description": "Disable system watchdog monitoring",
+          "default": false,
+          "env_var": "DISABLE_WATCHDOG"
+        }
+      }
+    },
+    "database": {
+      "type": "object",
+      "description": "Database configuration settings",
+      "additionalProperties": false,
+      "properties": {
+        "connection_timeout": {
+          "type": "integer",
+          "description": "Database connection timeout in seconds",
+          "default": 30,
+          "env_var": "DB_TIMEOUT",
+          "minimum": 1,
+          "maximum": 300
+        },
+        "host": {
+          "type": "string",
+          "description": "Database host address",
+          "default": "localhost",
+          "env_var": "DB_HOST",
+          "format": "hostname"
+        },
+        "backup_on_startup": {
+          "type": "boolean",
+          "description": "Create backup on application startup",
+          "default": true,
+          "env_var": "DB_BACKUP_ON_STARTUP"
+        },
+        "cleanup_interval": {
+          "type": "integer",
+          "description": "Database cleanup interval in seconds",
+          "default": 3600,
+          "env_var": "DB_CLEANUP_INTERVAL",
+          "minimum": 300,
+          "maximum": 604800
+        },
+        "max_backup_files": {
+          "type": "integer",
+          "description": "Maximum number of backup files to retain",
+          "default": 10,
+          "env_var": "DB_MAX_BACKUPS",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "user_data_path": {
+          "type": ["string", "null"],
+          "description": "Custom path for user data storage (null for default platform location)",
+          "default": null,
+          "env_var": "DINOAIR_USER_DATA"
+        },
+        "auto_cleanup_test_data": {
+          "type": "boolean",
+          "description": "Automatically clean up test data during development",
+          "default": true,
+          "env_var": "DB_AUTO_CLEANUP_TEST_DATA"
+        },
+        "max_backup_age_days": {
+          "type": "integer",
+          "description": "Maximum age in days for backup files before cleanup",
+          "default": 30,
+          "env_var": "DB_MAX_BACKUP_AGE_DAYS",
+          "minimum": 1,
+          "maximum": 365
+        },
+        "max_retries": {
+          "type": "integer",
+          "description": "Maximum number of database operation retries",
+          "default": 3,
+          "env_var": "DB_MAX_RETRIES",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "backup_retention_days": {
+          "type": "integer",
+          "description": "Number of days to retain database backups",
+          "default": 30,
+          "env_var": "DB_BACKUP_RETENTION_DAYS",
+          "minimum": 1,
+          "maximum": 365
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "description": "Artifact storage and encryption configuration",
+      "properties": {
+        "encryption_at_rest": {
+          "type": "boolean",
+          "description": "Enable encryption-at-rest for artifact files",
+          "default": true,
+          "env_var": "ARTIFACTS_ENCRYPTION_AT_REST"
+        },
+        "encryption_algorithm": {
+          "type": "string",
+          "description": "Encryption algorithm for artifact files",
+          "default": "AES-256-CBC",
+          "enum": ["AES-256-CBC", "AES-256-GCM"]
+        },
+        "file_size_threshold": {
+          "type": "integer",
+          "description": "File size threshold for external storage (bytes)",
+          "default": 1048576,
+          "env_var": "ARTIFACTS_FILE_SIZE_THRESHOLD",
+          "minimum": 1024,
+          "maximum": 104857600
+        },
+        "default_encryption_fields": {
+          "type": "array",
+          "description": "Default fields to encrypt for artifacts",
+          "default": ["content", "metadata"],
+          "items": {
+            "type": "string"
+          }
+        },
+        "key_rotation_days": {
+          "type": "integer",
+          "description": "Number of days before encryption key rotation",
+          "default": 90,
+          "env_var": "ARTIFACTS_KEY_ROTATION_DAYS",
+          "minimum": 1,
+          "maximum": 365
+        }
+      }
+    },
+    "ai": {
+      "type": "object",
+      "description": "AI and language model configuration",
+      "additionalProperties": false,
+      "properties": {
+        "model": {
+          "type": "string",
+          "description": "Default AI model to use",
+          "default": "gpt-3.5-turbo",
+          "env_var": "AI_MODEL",
+          "minLength": 1
+        },
+        "max_tokens": {
+          "type": "integer",
+          "description": "Maximum tokens for AI responses",
+          "default": 2000,
+          "env_var": "AI_MAX_TOKENS",
+          "minimum": 1,
+          "maximum": 128000
+        },
+        "temperature": {
+          "type": "number",
+          "description": "AI model temperature (creativity)",
+          "default": 0.7,
+          "env_var": "AI_TEMPERATURE",
+          "minimum": 0.0,
+          "maximum": 2.0
+        }
+      }
+    },
+    "lmstudio": {
+      "type": "object",
+      "description": "LM Studio integration settings",
+      "additionalProperties": false,
+      "properties": {
+        "base_url": {
+          "type": "string",
+          "description": "LM Studio base URL",
+          "default": "http://localhost:1234",
+          "env_var": "LMSTUDIO_BASE_URL",
+          "format": "uri"
+        },
+        "model": {
+          "type": "string",
+          "description": "LM Studio model name",
+          "default": "",
+          "env_var": "LMSTUDIO_MODEL"
+        },
+        "timeout_s": {
+          "type": "number",
+          "description": "LM Studio request timeout in seconds",
+          "default": 30.0,
+          "env_var": "LMSTUDIO_TIMEOUT",
+          "minimum": 1.0,
+          "maximum": 300.0
+        },
+        "headers": {
+          "type": "object",
+          "description": "Additional HTTP headers for LM Studio requests",
+          "default": {},
+          "env_var": "LMSTUDIO_HEADERS",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "options": {
+          "type": "object",
+          "description": "LM Studio model options",
+          "default": {},
+          "env_var": "LMSTUDIO_OPTIONS",
+          "additionalProperties": true
+        }
+      }
+    },
+    "ui": {
+      "type": "object",
+      "description": "User interface configuration",
+      "additionalProperties": false,
+      "properties": {
+        "window_width": {
+          "type": "integer",
+          "description": "Default window width in pixels",
+          "default": 1200,
+          "env_var": "UI_WINDOW_WIDTH",
+          "minimum": 640,
+          "maximum": 7680
+        },
+        "window_height": {
+          "type": "integer",
+          "description": "Default window height in pixels",
+          "default": 800,
+          "env_var": "UI_WINDOW_HEIGHT",
+          "minimum": 480,
+          "maximum": 4320
+        },
+        "font_size": {
+          "type": "integer",
+          "description": "Base font size in pixels",
+          "default": 12,
+          "env_var": "UI_FONT_SIZE",
+          "minimum": 8,
+          "maximum": 24
+        },
+        "show_sidebar": {
+          "type": "boolean",
+          "description": "Show sidebar by default",
+          "default": true,
+          "env_var": "UI_SHOW_SIDEBAR"
+        },
+        "update_interval": {
+          "type": "integer",
+          "description": "UI update interval in milliseconds",
+          "default": 100,
+          "env_var": "UI_UPDATE_INTERVAL",
+          "minimum": 16,
+          "maximum": 1000
+        },
+        "enable_debug_signals": {
+          "type": "boolean",
+          "description": "Enable debug signal monitoring",
+          "default": false,
+          "env_var": "ENABLE_DEBUG_SIGNALS"
+        }
+      }
+    },
+    "logging": {
+      "type": "object",
+      "description": "Logging configuration",
+      "additionalProperties": false,
+      "properties": {
+        "level": {
+          "type": "string",
+          "description": "Logging level",
+          "default": "INFO",
+          "env_var": "LOG_LEVEL",
+          "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+        },
+        "format": {
+          "type": "string",
+          "description": "Log message format",
+          "default": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+          "env_var": "LOG_FORMAT"
+        },
+        "file_enabled": {
+          "type": "boolean",
+          "description": "Enable file logging",
+          "default": true,
+          "env_var": "LOG_FILE_ENABLED"
+        },
+        "console_enabled": {
+          "type": "boolean",
+          "description": "Enable console logging",
+          "default": true,
+          "env_var": "LOG_CONSOLE_ENABLED"
+        }
+      }
+    },
+    "async": {
+      "type": "object",
+      "description": "Asynchronous operations configuration",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable async operations globally",
+          "default": true,
+          "env_var": "ASYNC_ENABLED"
+        },
+        "file_operations": {
+          "type": "object",
+          "description": "File operation async settings",
+          "additionalProperties": false,
+          "properties": {
+            "use_async": {
+              "type": "boolean",
+              "description": "Use async for file operations",
+              "default": true,
+              "env_var": "ASYNC_FILE_OPS"
+            },
+            "concurrent_limit": {
+              "type": "integer",
+              "description": "Maximum concurrent file operations",
+              "default": 10,
+              "env_var": "ASYNC_FILE_CONCURRENT_LIMIT",
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        },
+        "network_operations": {
+          "type": "object",
+          "description": "Network operation async settings",
+          "additionalProperties": false,
+          "properties": {
+            "use_async": {
+              "type": "boolean",
+              "description": "Use async for network operations",
+              "default": true,
+              "env_var": "ASYNC_NETWORK_OPS"
+            },
+            "timeout": {
+              "type": "number",
+              "description": "Network operation timeout in seconds",
+              "default": 30.0,
+              "env_var": "ASYNC_NETWORK_TIMEOUT",
+              "minimum": 1.0,
+              "maximum": 300.0
+            },
+            "max_concurrent_requests": {
+              "type": "integer",
+              "description": "Maximum concurrent network requests",
+              "default": 5,
+              "env_var": "ASYNC_NETWORK_CONCURRENT_LIMIT",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        },
+        "pdf_processing": {
+          "type": "object",
+          "description": "PDF processing async settings",
+          "additionalProperties": false,
+          "properties": {
+            "use_async": {
+              "type": "boolean",
+              "description": "Use async for PDF processing",
+              "default": true,
+              "env_var": "ASYNC_PDF_PROCESSING"
+            },
+            "timeout": {
+              "type": "number",
+              "description": "PDF processing timeout in seconds",
+              "default": 60.0,
+              "env_var": "ASYNC_PDF_TIMEOUT",
+              "minimum": 5.0,
+              "maximum": 600.0
+            },
+            "max_concurrent_pages": {
+              "type": "integer",
+              "description": "Maximum concurrent PDF pages to process",
+              "default": 3,
+              "env_var": "ASYNC_PDF_CONCURRENT_PAGES",
+              "minimum": 1,
+              "maximum": 20
+            }
+          }
+        }
+      }
+    },
+    "input_processing": {
+      "type": "object",
+      "description": "Input processing and validation settings",
+      "additionalProperties": false,
+      "properties": {
+        "enable_profanity_filter": {
+          "type": "boolean",
+          "description": "Enable profanity filtering",
+          "default": false,
+          "env_var": "ENABLE_PROFANITY_FILTER"
+        },
+        "enable_pattern_detection": {
+          "type": "boolean",
+          "description": "Enable pattern detection",
+          "default": true,
+          "env_var": "ENABLE_PATTERN_DETECTION"
+        },
+        "max_input_size": {
+          "type": "integer",
+          "description": "Maximum input size in bytes",
+          "default": 1048576,
+          "env_var": "MAX_INPUT_SIZE",
+          "minimum": 1024,
+          "maximum": 104857600
+        }
+      }
+    },
+    "pseudocode_translator": {
+      "type": "object",
+      "description": "Pseudocode translator configuration",
+      "additionalProperties": false,
+      "properties": {
+        "cache_enabled": {
+          "type": "boolean",
+          "description": "Enable translation caching",
+          "default": true,
+          "env_var": "CACHE_ENABLED"
+        },
+        "max_cache_size": {
+          "type": "integer",
+          "description": "Maximum cache size in MB",
+          "default": 100,
+          "env_var": "TRANSLATOR_CACHE_SIZE",
+          "minimum": 10,
+          "maximum": 1000
+        }
+      }
+    },
+    "notes": {
+      "type": "object",
+      "description": "Notes system configuration",
+      "additionalProperties": false,
+      "properties": {
+        "max_note_size": {
+          "type": "integer",
+          "description": "Maximum note size in bytes",
+          "default": 1048576,
+          "env_var": "MAX_NOTE_SIZE",
+          "minimum": 1024,
+          "maximum": 104857600
+        },
+        "session_timeout": {
+          "type": "integer",
+          "description": "Note session timeout in seconds",
+          "default": 3600,
+          "env_var": "SESSION_TIMEOUT",
+          "minimum": 60,
+          "maximum": 86400
+        },
+        "supported_file_types": {
+          "type": "array",
+          "description": "Supported file types for notes",
+          "default": [".txt", ".md", ".json", ".py", ".js", ".html", ".css"],
+          "env_var": "SUPPORTED_FILE_TYPES",
+          "items": {
+            "type": "string",
+            "pattern": "^\\.[a-zA-Z0-9]+$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    },
+    "error_handling": {
+      "type": "object",
+      "description": "Error handling and resilience configuration",
+      "additionalProperties": false,
+      "properties": {
+        "retry": {
+          "type": "object",
+          "description": "Retry mechanism settings",
+          "additionalProperties": false,
+          "properties": {
+            "max_attempts": {
+              "type": "integer",
+              "description": "Maximum retry attempts",
+              "default": 3,
+              "env_var": "RETRY_MAX_ATTEMPTS",
+              "minimum": 1,
+              "maximum": 10
+            },
+            "initial_delay": {
+              "type": "number",
+              "description": "Initial retry delay in seconds",
+              "default": 1.0,
+              "env_var": "RETRY_INITIAL_DELAY",
+              "minimum": 0.1,
+              "maximum": 60.0
+            },
+            "max_delay": {
+              "type": "number",
+              "description": "Maximum retry delay in seconds",
+              "default": 30.0,
+              "env_var": "RETRY_MAX_DELAY",
+              "minimum": 1.0,
+              "maximum": 300.0
+            },
+            "backoff_factor": {
+              "type": "number",
+              "description": "Exponential backoff factor",
+              "default": 2.0,
+              "env_var": "RETRY_BACKOFF_FACTOR",
+              "minimum": 1.0,
+              "maximum": 10.0
+            },
+            "jitter": {
+              "type": "boolean",
+              "description": "Enable retry jitter",
+              "default": true,
+              "env_var": "RETRY_JITTER"
+            }
+          }
+        },
+        "circuit_breaker": {
+          "type": "object",
+          "description": "Circuit breaker settings",
+          "additionalProperties": false,
+          "properties": {
+            "failure_threshold": {
+              "type": "integer",
+              "description": "Failure threshold before opening circuit",
+              "default": 5,
+              "env_var": "CB_FAILURE_THRESHOLD",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "recovery_timeout": {
+              "type": "number",
+              "description": "Circuit recovery timeout in seconds",
+              "default": 60.0,
+              "env_var": "CB_RECOVERY_TIMEOUT",
+              "minimum": 1.0,
+              "maximum": 3600.0
+            },
+            "success_threshold": {
+              "type": "integer",
+              "description": "Success threshold for closing circuit",
+              "default": 3,
+              "env_var": "CB_SUCCESS_THRESHOLD",
+              "minimum": 1,
+              "maximum": 20
+            },
+            "timeout": {
+              "type": "number",
+              "description": "Circuit breaker timeout in seconds",
+              "default": 5.0,
+              "env_var": "CB_TIMEOUT",
+              "minimum": 0.1,
+              "maximum": 60.0
+            }
+          }
+        },
+        "timeout": {
+          "type": "object",
+          "description": "Timeout settings",
+          "additionalProperties": false,
+          "properties": {
+            "default_timeout": {
+              "type": "number",
+              "description": "Default operation timeout in seconds",
+              "default": 10.0,
+              "env_var": "DEFAULT_TIMEOUT",
+              "minimum": 0.1,
+              "maximum": 300.0
+            }
+          }
+        },
+        "logging": {
+          "type": "object",
+          "description": "Error logging settings",
+          "additionalProperties": false,
+          "properties": {
+            "log_errors": {
+              "type": "boolean",
+              "description": "Enable error logging",
+              "default": true,
+              "env_var": "LOG_ERRORS"
+            },
+            "aggregate_errors": {
+              "type": "boolean",
+              "description": "Enable error aggregation",
+              "default": true,
+              "env_var": "AGGREGATE_ERRORS"
+            }
+          }
+        }
+      }
+    },
+    "security": {
+      "type": "object",
+      "description": "Security settings for process execution and system access",
+      "additionalProperties": false,
+      "properties": {
+        "process": {
+          "type": "object",
+          "description": "Process execution security settings",
+          "additionalProperties": false,
+          "properties": {
+            "allowlist": {
+              "type": "object",
+              "description": "Binary execution allowlist configuration",
+              "additionalProperties": false,
+              "properties": {
+                "binaries": {
+                  "type": "array",
+                  "description": "List of allowed binary names for execution",
+                  "default": [
+                    "python",
+                    "python.exe",
+                    "python3",
+                    "python3.exe",
+                    "git",
+                    "git.exe",
+                    "node",
+                    "node.exe",
+                    "npm",
+                    "npm.exe",
+                    "pip",
+                    "pip.exe",
+                    "pip3",
+                    "pip3.exe",
+                    "sqlite3",
+                    "sqlite3.exe",
+                    "echo",
+                    "cat",
+                    "head",
+                    "tail",
+                    "find",
+                    "grep",
+                    "wc",
+                    "sort",
+                    "uniq",
+                    "ls",
+                    "dir",
+                    "pwd",
+                    "whoami",
+                    "date",
+                    "hostname",
+                    "ping",
+                    "curl",
+                    "wget"
+                  ],
+                  "env_var": "SECURITY_PROCESS_ALLOWLIST_BINARIES",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "pattern": "^[a-zA-Z0-9._-]+(\\.exe)?$"
+                  },
+                  "uniqueItems": true,
+                  "minItems": 1,
+                  "maxItems": 200
+                },
+                "arg_patterns": {
+                  "type": "object",
+                  "description": "Optional regex patterns for validating arguments per binary",
+                  "default": {},
+                  "env_var": "SECURITY_PROCESS_ALLOWLIST_ARG_PATTERNS",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 500
+                    },
+                    "maxItems": 20
+                  },
+                  "maxProperties": 50
+                },
+                "enable_merge": {
+                  "type": "boolean",
+                  "description": "Allow merging config allowlist with per-call allowlists (true) or enforce intersection (false)",
+                  "default": false,
+                  "env_var": "SECURITY_PROCESS_ALLOWLIST_ENABLE_MERGE"
+                }
+              }
+            },
+            "flags": {
+              "type": "object",
+              "description": "Platform-specific security flags",
+              "additionalProperties": false,
+              "properties": {
+                "no_window_windows": {
+                  "type": "boolean",
+                  "description": "On Windows, suppress console windows for subprocess execution",
+                  "default": true,
+                  "env_var": "SECURITY_PROCESS_FLAGS_NO_WINDOW_WINDOWS"
+                },
+                "close_fds_unix": {
+                  "type": "boolean",
+                  "description": "On Unix systems, close file descriptors in child processes",
+                  "default": true,
+                  "env_var": "SECURITY_PROCESS_FLAGS_CLOSE_FDS_UNIX"
+                },
+                "disallow_tty": {
+                  "type": "boolean",
+                  "description": "Prevent subprocess from accessing TTY/terminal",
+                  "default": true,
+                  "env_var": "SECURITY_PROCESS_FLAGS_DISALLOW_TTY"
+                },
+                "stdin_default_devnull": {
+                  "type": "boolean",
+                  "description": "Default stdin to /dev/null for subprocess security",
+                  "default": true,
+                  "env_var": "SECURITY_PROCESS_FLAGS_STDIN_DEFAULT_DEVNULL"
+                }
+              }
+            },
+            "logging": {
+              "type": "object",
+              "description": "Process execution logging and security settings",
+              "additionalProperties": false,
+              "properties": {
+                "redact_env_keys": {
+                  "type": "array",
+                  "description": "Environment variable keys to redact from logs (case-insensitive substring matching)",
+                  "default": ["secret", "key", "token", "password", "credential", "auth"],
+                  "env_var": "SECURITY_PROCESS_LOGGING_REDACT_ENV_KEYS",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 50
+                  },
+                  "uniqueItems": true,
+                  "maxItems": 50
+                },
+                "redact_arg_patterns": {
+                  "type": "array",
+                  "description": "Regex patterns for redacting sensitive arguments from logs",
+                  "default": [
+                    "--password=.*",
+                    "--token=.*",
+                    "--secret=.*",
+                    "--key=.*",
+                    "-p\\s+\\S+",
+                    "--auth\\s+\\S+"
+                  ],
+                  "env_var": "SECURITY_PROCESS_LOGGING_REDACT_ARG_PATTERNS",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "maxItems": 100
+                },
+                "log_command_execution": {
+                  "type": "boolean",
+                  "description": "Enable logging of process execution events",
+                  "default": true,
+                  "env_var": "SECURITY_PROCESS_LOGGING_LOG_COMMAND_EXECUTION"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

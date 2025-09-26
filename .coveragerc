@@ -1,0 +1,46 @@
+# Coverage configuration for DeepSource
+[run]
+source = .
+branch = True
+omit = 
+    */tests/*
+    */test_*
+    */.venv/*
+    */venv/*
+    */env/*
+    */__pycache__/*
+    */migrations/*
+    */node_modules/*
+    setup.py
+    manage.py
+    conftest.py
+    */settings/local.py
+    */settings/development.py
+    # Security scripts (these are tools, not application code)
+    github_security_loader.py
+    setup_github_security.py
+    simple_github_security.py
+    github_security_diagnostic.py
+    check_token_scopes.py
+    security_summary.py
+    github_to_python_list.py
+    setup_deepsource_coverage.py
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    if self.debug:
+    if settings.DEBUG
+    raise AssertionError
+    raise NotImplementedError
+    if 0:
+    if __name__ == .__main__.:
+    class .*\bProtocol\):
+    @(abc\.)?abstractmethod
+
+[html]
+directory = htmlcov
+
+[xml]
+output = coverage.xml

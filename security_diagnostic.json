@@ -1,0 +1,38 @@
+{
+  "timestamp": "Tue, 23 Sep 2025 13:42:12 GMT",
+  "repository": "dinoopitstudios/DinoAir",
+  "token_scopes": {
+    "scopes": [],
+    "missing": [
+      "repo - Full repository access (required for private repos)",
+      "security_events - Security events access (for security alerts)",
+      "admin:org - Organization admin (for org-level security)",
+      "read:org - Organization read access"
+    ]
+  },
+  "repository_access": {},
+  "security_features": {},
+  "endpoint_tests": {
+    "code_scanning": {
+      "status_code": 404,
+      "accessible": false,
+      "error": null
+    },
+    "secret_scanning": {
+      "status_code": 404,
+      "accessible": false,
+      "error": null
+    },
+    "dependabot": {
+      "status_code": 404,
+      "accessible": false,
+      "error": null
+    },
+    "vulnerability_alerts": {
+      "status_code": 404,
+      "accessible": false,
+      "error": null
+    }
+  },
+  "organization": {}
+}

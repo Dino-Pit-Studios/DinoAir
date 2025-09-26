@@ -1,0 +1,21 @@
+{
+  "name": "dinoair-api-tracker",
+  "version": "1.0.0",
+  "description": "Live API call tracker for DinoAir GUI interactions using Playwright",
+  "main": "api-tracker.js",
+  "scripts": {
+    "start": "node api-tracker.js",
+    "track": "node api-tracker.js",
+    "install-deps": "npm install"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0",
+    "express": "^4.18.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  },
+  "keywords": ["api", "tracking", "playwright", "monitoring", "dinoair"],
+  "author": "DinoAir Team",
+  "license": "MIT"
+}

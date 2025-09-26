@@ -1,0 +1,45 @@
+# DinoAir Development Dependencies
+# Generated on 2025-09-17 from virtual environment
+# These are development tools: testing, linting, type checking, profiling, documentation
+
+# Testing framework and plugins
+
+pytest==8.4.2             # Testing framework
+pytest-asyncio==1.2.0    # Async test support
+
+pytest-cov==7.0.0         # Coverage reporting
+pytest-mock==3.15.1       # Mock objects for testing
+pytest-timeout==2.4.0     # Test timeout handling
+coverage==7.10.7          # Code coverage measurement
+
+# Code quality and formatting
+black==24.3.0            # Code formatter
+ruff==0.13.0              # Fast linter and formatter
+isort==6.0.1             # Import statement sorter
+mypy==1.18.2              # Static type checker
+mypy-extensions==1.1.0    # Extensions for mypy
+
+# Security and safety analysis
+bandit==1.8.6             # Security linter
+safety==3.6.2             # Dependency vulnerability scanner
+
+# Performance and profiling
+memory-profiler==0.61.0   # Memory usage profiling
+py-spy==0.4.1             # Sampling profiler
+
+# Documentation generation
+sphinx>=8.2.0             # Documentation generator (current version 8.2.3)
+sphinx-autodoc-typehints==3.2.0 # Type hints in Sphinx docs (compatible with Sphinx >=8.2)
+sphinx-rtd-theme>=3.0.0   # Read the Docs Sphinx theme (current version 3.0.2)
+sphinxcontrib-applehelp==2.0.0    # Apple Help output
+sphinxcontrib-devhelp==2.0.0      # HTML Help output
+sphinxcontrib-htmlhelp==2.1.0     # HTML Help output
+sphinxcontrib-jquery==4.1         # jQuery for Sphinx
+sphinxcontrib-jsmath==1.0.1       # Math rendering
+sphinxcontrib-qthelp==2.0.0       # Qt Help output
+sphinxcontrib-serializinghtml==2.0.0 # Serializing HTML output
+
+# Type stubs for better static analysis
+types-aiofiles==24.1.0.20250822   # Type stubs for aiofiles
+types-psutil==5.9.5.20240516      # Type stubs for psutil
+types-requests==2.32.4.20250913   # Type stubs for requests

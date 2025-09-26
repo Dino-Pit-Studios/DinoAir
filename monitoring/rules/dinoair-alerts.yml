@@ -1,0 +1,155 @@
+# DinoAir Alerting Rules for Prometheus
+groups:
+  - name: dinoair-application
+    rules:
+      # Application Health Alerts
+      - alert: DinoAirDown
+        expr: up{job="dinoair-app"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: dinoair
+        annotations:
+          summary: "DinoAir application is down"
+          description: "DinoAir application has been down for more than 1 minute"
+
+      - alert: DinoAirHighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+          service: dinoair
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value | humanizePercentage }} for the last 5 minutes"
+
+      - alert: DinoAirHighLatency
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+        for: 2m
+        labels:
+          severity: warning
+          service: dinoair
+        annotations:
+          summary: "High response latency"
+          description: "95th percentile latency is {{ $value }}s"
+
+      - alert: DinoAirMemoryUsage
+        expr: (container_memory_usage_bytes{name="dinoair-app"} / container_spec_memory_limit_bytes{name="dinoair-app"}) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          service: dinoair
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is {{ $value | humanizePercentage }}"
+
+      - alert: DinoAirCPUUsage
+        expr: rate(container_cpu_usage_seconds_total{name="dinoair-app"}[5m]) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          service: dinoair
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage is {{ $value | humanizePercentage }}"
+
+  - name: dinoair-dependencies
+    rules:
+      # Database Alerts
+      - alert: PostgreSQLDown
+        expr: up{job="postgres"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: postgres
+        annotations:
+          summary: "PostgreSQL database is down"
+          description: "PostgreSQL has been down for more than 1 minute"
+
+      - alert: PostgreSQLHighConnections
+        expr: pg_stat_database_numbackends / pg_settings_max_connections > 0.8
+        for: 2m
+        labels:
+          severity: warning
+          service: postgres
+        annotations:
+          summary: "High PostgreSQL connection usage"
+          description: "Connection usage is {{ $value | humanizePercentage }}"
+
+      # Redis Alerts
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: redis
+        annotations:
+          summary: "Redis cache is down"
+          description: "Redis has been down for more than 1 minute"
+
+      - alert: RedisMemoryUsage
+        expr: redis_memory_used_bytes / redis_memory_max_bytes > 0.9
+        for: 2m
+        labels:
+          severity: warning
+          service: redis
+        annotations:
+          summary: "High Redis memory usage"
+          description: "Redis memory usage is {{ $value | humanizePercentage }}"
+
+  - name: dinoair-infrastructure
+    rules:
+      # System Resource Alerts
+      - alert: HighDiskUsage
+        expr: (node_filesystem_size_bytes - node_filesystem_avail_bytes) / node_filesystem_size_bytes > 0.85
+        for: 2m
+        labels:
+          severity: warning
+          service: system
+        annotations:
+          summary: "High disk usage"
+          description: "Disk usage is {{ $value | humanizePercentage }} on {{ $labels.device }}"
+
+      - alert: HighSystemLoad
+        expr: node_load5 / count by (instance) (node_cpu_seconds_total{mode="idle"}) > 2
+        for: 5m
+        labels:
+          severity: warning
+          service: system
+        annotations:
+          summary: "High system load"
+          description: "System load is {{ $value }}"
+
+      # Container Alerts
+      - alert: ContainerRestarting
+        expr: rate(container_start_time_seconds[10m]) > 0
+        for: 2m
+        labels:
+          severity: warning
+          service: docker
+        annotations:
+          summary: "Container restarting frequently"
+          description: "Container {{ $labels.name }} is restarting frequently"
+
+  - name: dinoair-security
+    rules:
+      # Security Monitoring
+      - alert: UnauthorizedAccessAttempts
+        expr: rate(http_requests_total{status="401"}[5m]) > 10
+        for: 1m
+        labels:
+          severity: critical
+          service: security
+        annotations:
+          summary: "High rate of unauthorized access attempts"
+          description: "{{ $value }} unauthorized requests per second in the last 5 minutes"
+
+      - alert: SuspiciousTraffic
+        expr: rate(http_requests_total[1m]) > 100
+        for: 2m
+        labels:
+          severity: warning
+          service: security
+        annotations:
+          summary: "Unusually high traffic"
+          description: "{{ $value }} requests per second, potential DDoS attack"

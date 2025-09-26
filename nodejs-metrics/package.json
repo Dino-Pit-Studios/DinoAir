@@ -1,0 +1,24 @@
+{
+  "name": "dinoair-nodejs-metrics",
+  "version": "1.0.0",
+  "description": "Node.js metrics collection for DinoAir using hot-shots",
+  "main": "metrics-example.js",
+  "scripts": {
+    "install-deps": "npm install hot-shots",
+    "test": "node metrics-example.js",
+    "start": "node server-with-metrics.js"
+  },
+  "dependencies": {
+    "hot-shots": "^10.0.0",
+    "express": "^4.18.0"
+  },
+  "keywords": [
+    "datadog",
+    "metrics",
+    "nodejs",
+    "hot-shots",
+    "dinoair"
+  ],
+  "author": "DinoAir Team",
+  "license": "MIT"
+}

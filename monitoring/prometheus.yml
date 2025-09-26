@@ -1,0 +1,79 @@
+# Prometheus configuration for DinoAir monitoring
+global:
+  scrape_interval: 30s
+  evaluation_interval: 30s
+  scrape_timeout: 10s
+
+# Rule files
+rule_files:
+  - "rules/*.yml"
+
+# Alerting configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+# Scrape configurations
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # DinoAir application metrics
+  - job_name: "dinoair-app"
+    static_configs:
+      - targets: ["dinoair-app:24801"]
+    metrics_path: "/metrics"
+    scrape_interval: 15s
+    scrape_timeout: 10s
+
+  # DinoAir health endpoints
+  - job_name: "dinoair-health"
+    static_configs:
+      - targets: ["dinoair-app:24801"]
+    metrics_path: "/health"
+    scrape_interval: 30s
+    scrape_timeout: 5s
+
+  # Redis metrics
+  - job_name: "redis"
+    static_configs:
+      - targets: ["redis:6379"]
+
+  # PostgreSQL metrics
+  - job_name: "postgres"
+    static_configs:
+      - targets: ["postgres:5432"]
+
+  # Node Exporter for system metrics
+  - job_name: "node-exporter"
+    static_configs:
+      - targets: ["node-exporter:9100"]
+
+  # Docker container metrics
+  - job_name: "cadvisor"
+    static_configs:
+      - targets: ["cadvisor:8080"]
+
+  # Nginx metrics
+  - job_name: "nginx"
+    static_configs:
+      - targets: ["nginx:9113"]
+    metrics_path: "/metrics"
+
+# Remote write configuration for long-term storage
+remote_write:
+  - url: "http://localhost:8086/api/v1/prom/write?db=prometheus"
+    # Add authentication if needed
+    # basic_auth:
+    #   username: admin
+    #   password: password
+
+# Storage configuration
+storage:
+  tsdb:
+    retention.time: 30d
+    retention.size: 10GB

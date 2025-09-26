@@ -1,0 +1,32 @@
+# DinoAir Service Configuration
+# Services that can be routed through the core router
+
+- name: lmstudio.chat
+  adapter: lmstudio
+  tags: [chat, llm, lmstudio]
+  adapter_config:
+    base_url: http://127.0.0.1:1234
+    model: llama-3.1-8b-instruct
+    timeout_s: 30
+    retries: 3
+
+- name: lmstudio.completion
+  adapter: lmstudio
+  tags: [completion, llm, lmstudio]
+  adapter_config:
+    base_url: http://127.0.0.1:1234
+    model: llama-3.1-8b-instruct
+    timeout_s: 30
+    retries: 3
+
+- name: translator.local
+  adapter: local_python
+  tags: [translator, local_python]
+  adapter_config:
+    function_path: api.services.translator:router_translate
+
+- name: search.local
+  adapter: local_python
+  tags: [search, local_python]
+  adapter_config:
+    function_path: api.services.search:router_search

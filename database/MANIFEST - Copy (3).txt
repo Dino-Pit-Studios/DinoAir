@@ -1,0 +1,21 @@
+Separation Bundle Manifest
+Generated: 2025-09-14 17:38:02
+
+Order (prefix -> folder):
+  01 -> utils
+  02 -> database
+  03 -> models
+  04 -> core_router
+  05 -> api
+  06 -> rag
+  07 -> tools
+  08 -> input_processing
+  09 -> monitoring
+  10 -> src
+  11 -> GUI
+
+Excluded patterns:
+  Dir names: .git, .idea, .mypy_cache, .pytest_cache, .ruff_cache, .venv, .vscode, __pycache__, build, dist, htmlcov, node_modules
+  File names: .DS_Store, Thumbs.db
+
+Note: This archive preserves original relative paths under each prefixed folder.

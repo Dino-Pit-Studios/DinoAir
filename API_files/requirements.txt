@@ -1,0 +1,20 @@
+# Runtime dependencies for the DinoAir API
+# Notes:
+# - fastapi pulls in starlette and pydantic v2
+# - orjson is required for ORJSONResponse
+# - python-json-logger provides JsonFormatter (imported as pythonjsonlogger)
+# - uvicorn is used for local development server
+
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+orjson==3.9.15
+python-json-logger>=2.0.7
+anyio>=4.3.0
+pydantic>=2.7.0
+numpy>=1.26.0  # lightweight numeric dependency used broadly
+pyyaml>=6.0.0  # YAML parser for services config (core_router.config requires PyYAML)
+
+# Optional future RAG dependencies (defer heavy deps in this subtask):
+# watchdog>=4.0.0   # file monitoring; guarded at runtime
+# pypdf>=4.0.0      # PDF text extraction; safer alternative to PyPDF2, install when enabling ingestion fully
+

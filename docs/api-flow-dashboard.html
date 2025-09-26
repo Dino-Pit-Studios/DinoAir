@@ -1,0 +1,659 @@
+<!doctype html>
+<html>
+  <head>
+    <title>DinoAir API Flow Visualizer - Live Dashboard</title>
+    <meta charset="utf-8" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+      body {
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #0d1117;
+        color: #ffffff;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 2em;
+        color: white;
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 20px;
+        height: calc(100vh - 200px);
+      }
+
+      .flow-visualization {
+        background: #161b22;
+        border-radius: 10px;
+        padding: 20px;
+        overflow: hidden;
+      }
+
+      .side-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .stats-panel {
+        background: #161b22;
+        border-radius: 10px;
+        padding: 20px;
+      }
+
+      .call-log-panel {
+        background: #161b22;
+        border-radius: 10px;
+        padding: 20px;
+        overflow-y: auto;
+        flex: 1;
+      }
+
+      .stat-card {
+        background: #21262d;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        border-left: 4px solid #58a6ff;
+      }
+
+      .stat-number {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: #58a6ff;
+      }
+
+      .stat-label {
+        color: #8b949e;
+        font-size: 0.9em;
+      }
+
+      .flow-node {
+        fill: #21262d;
+        stroke: #58a6ff;
+        stroke-width: 2;
+        cursor: pointer;
+      }
+
+      .flow-node.active {
+        fill: #58a6ff;
+        stroke: #ffffff;
+        animation: pulse 1s infinite;
+      }
+
+      .flow-node.success {
+        fill: #28a745;
+        stroke: #ffffff;
+      }
+
+      .flow-node.error {
+        fill: #dc3545;
+        stroke: #ffffff;
+      }
+
+      .flow-link {
+        fill: none;
+        stroke: #58a6ff;
+        stroke-width: 2;
+        opacity: 0.6;
+      }
+
+      .flow-link.active {
+        stroke: #ffffff;
+        stroke-width: 3;
+        opacity: 1;
+        animation: flow 1s infinite;
+      }
+
+      .flow-text {
+        fill: #ffffff;
+        font-size: 12px;
+        text-anchor: middle;
+        pointer-events: none;
+      }
+
+      .call-entry {
+        background: #21262d;
+        margin: 8px 0;
+        padding: 12px;
+        border-radius: 6px;
+        border-left: 4px solid #58a6ff;
+        font-size: 0.9em;
+      }
+
+      .call-entry.request {
+        border-left-color: #f39c12;
+      }
+
+      .call-entry.response {
+        border-left-color: #28a745;
+      }
+
+      .call-entry.error {
+        border-left-color: #dc3545;
+      }
+
+      .method-badge {
+        background: #58a6ff;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 10px;
+        font-size: 0.7em;
+        margin-right: 8px;
+      }
+
+      .timestamp {
+        color: #8b949e;
+        font-size: 0.8em;
+        float: right;
+      }
+
+      .controls {
+        background: #161b22;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+
+      .control-button {
+        background: #238636;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        margin-right: 10px;
+        cursor: pointer;
+        font-size: 0.9em;
+      }
+
+      .control-button:hover {
+        background: #2ea043;
+      }
+
+      .control-button.stop {
+        background: #da3633;
+      }
+
+      .control-button.stop:hover {
+        background: #dc3545;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes flow {
+        0% {
+          stroke-dasharray: 0 10;
+        }
+        100% {
+          stroke-dasharray: 10 0;
+        }
+      }
+
+      .endpoint-info {
+        background: #21262d;
+        padding: 10px;
+        border-radius: 6px;
+        margin-top: 10px;
+        border: 1px solid #30363d;
+      }
+
+      .endpoint-path {
+        font-weight: bold;
+        color: #58a6ff;
+      }
+
+      .response-time {
+        color: #28a745;
+        font-size: 0.8em;
+      }
+
+      .error-message {
+        color: #dc3545;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>🚀 DinoAir API Flow Visualizer</h1>
+      <p>Live tracking of API calls through the complete request pipeline</p>
+    </div>
+
+    <div class="controls">
+      <button class="control-button" id="start-btn" onclick="startTracking()">
+        ▶️ Start Tracking
+      </button>
+      <button class="control-button stop" id="stop-btn" onclick="stopTracking()">
+        ⏹️ Stop Tracking
+      </button>
+      <button class="control-button" onclick="clearLog()">🗑️ Clear Log</button>
+      <button class="control-button" onclick="exportData()">💾 Export Data</button>
+      <span style="margin-left: 20px; color: #8b949e">
+        Status: <span id="tracking-status">Ready</span>
+      </span>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="flow-visualization">
+        <h3>📊 Request Flow Pipeline</h3>
+        <svg id="flow-diagram" width="100%" height="100%"></svg>
+      </div>
+
+      <div class="side-panel">
+        <div class="stats-panel">
+          <h3>📈 Live Statistics</h3>
+          <div class="stat-card">
+            <div class="stat-number" id="total-requests">0</div>
+            <div class="stat-label">Total Requests</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="success-rate">100%</div>
+            <div class="stat-label">Success Rate</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="avg-response-time">0ms</div>
+            <div class="stat-label">Avg Response Time</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="requests-per-minute">0</div>
+            <div class="stat-label">Requests/Min</div>
+          </div>
+        </div>
+
+        <div class="call-log-panel">
+          <h3>🔴 Live Call Log</h3>
+          <div id="call-log">
+            <p style="color: #8b949e; text-align: center; margin-top: 50px">
+              No API calls yet...<br />
+              Start the tracker and interact with DinoAir GUI
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      class APIFlowVisualizer {
+        constructor() {
+          this.isTracking = false;
+          this.callData = [];
+          this.updateInterval = null;
+          this.flowNodes = [];
+          this.currentCallId = null;
+
+          this.initializeFlowDiagram();
+          this.setupWebSocket();
+        }
+
+        initializeFlowDiagram() {
+          const svg = d3.select('#flow-diagram');
+          const width = 700;
+          const height = 400;
+
+          svg.attr('viewBox', `0 0 ${width} ${height}`);
+
+          // Define the flow stages
+          this.flowStages = [
+            { id: 'frontend', name: 'Frontend\n(React)', x: 100, y: 100, type: 'source' },
+            { id: 'api-lib', name: 'API Library\n(lib/api)', x: 250, y: 100, type: 'process' },
+            { id: 'cors', name: 'CORS\nValidation', x: 400, y: 50, type: 'middleware' },
+            { id: 'request-id', name: 'Request ID\nMiddleware', x: 550, y: 50, type: 'middleware' },
+            { id: 'auth', name: 'Auth\nMiddleware', x: 400, y: 150, type: 'middleware' },
+            {
+              id: 'body-limit',
+              name: 'Body Limit\nMiddleware',
+              x: 550,
+              y: 150,
+              type: 'middleware',
+            },
+            { id: 'fastapi', name: 'FastAPI\nApplication', x: 400, y: 250, type: 'backend' },
+            { id: 'services', name: 'Backend\nServices', x: 550, y: 250, type: 'backend' },
+            { id: 'external', name: 'External\nServices', x: 400, y: 350, type: 'external' },
+          ];
+
+          // Define connections between stages
+          this.flowConnections = [
+            { source: 'frontend', target: 'api-lib' },
+            { source: 'api-lib', target: 'cors' },
+            { source: 'cors', target: 'request-id' },
+            { source: 'request-id', target: 'auth' },
+            { source: 'auth', target: 'body-limit' },
+            { source: 'body-limit', target: 'fastapi' },
+            { source: 'fastapi', target: 'services' },
+            { source: 'services', target: 'external' },
+          ];
+
+          this.drawFlowDiagram(svg, width, height);
+        }
+
+        drawFlowDiagram(svg, width, height) {
+          // Draw connections
+          svg
+            .selectAll('.flow-link')
+            .data(this.flowConnections)
+            .enter()
+            .append('line')
+            .attr('class', 'flow-link')
+            .attr('x1', d => this.getStage(d.source).x)
+            .attr('y1', d => this.getStage(d.source).y)
+            .attr('x2', d => this.getStage(d.target).x)
+            .attr('y2', d => this.getStage(d.target).y);
+
+          // Draw nodes
+          const nodes = svg
+            .selectAll('.flow-node')
+            .data(this.flowStages)
+            .enter()
+            .append('g')
+            .attr('class', 'flow-node-group');
+
+          nodes
+            .append('circle')
+            .attr('class', 'flow-node')
+            .attr('id', d => `node-${d.id}`)
+            .attr('cx', d => d.x)
+            .attr('cy', d => d.y)
+            .attr('r', 30)
+            .on('click', (event, d) => this.showNodeDetails(d));
+
+          nodes
+            .append('text')
+            .attr('class', 'flow-text')
+            .attr('x', d => d.x)
+            .attr('y', d => d.y + 5)
+            .text(d => d.name);
+        }
+
+        getStage(id) {
+          return this.flowStages.find(stage => stage.id === id);
+        }
+
+        animateFlow(callData) {
+          // Reset all nodes
+          d3.selectAll('.flow-node').classed('active success error', false);
+          d3.selectAll('.flow-link').classed('active', false);
+
+          if (callData.type === 'request') {
+            this.animateRequest(callData);
+          } else if (callData.type === 'response') {
+            this.animateResponse(callData);
+          }
+        }
+
+        animateRequest(callData) {
+          const path = this.getRequestPath(callData.path);
+
+          path.forEach((stageId, index) => {
+            setTimeout(() => {
+              d3.select(`#node-${stageId}`).classed('active', true);
+
+              if (index > 0) {
+                const prevStage = path[index - 1];
+                d3.selectAll('.flow-link')
+                  .filter(d => d.source === prevStage && d.target === stageId)
+                  .classed('active', true);
+              }
+            }, index * 200);
+          });
+        }
+
+        animateResponse(callData) {
+          const isSuccess = callData.status >= 200 && callData.status < 400;
+          const nodeClass = isSuccess ? 'success' : 'error';
+
+          setTimeout(() => {
+            d3.selectAll('.flow-node').classed('active', false).classed(nodeClass, true);
+            setTimeout(() => {
+              d3.selectAll('.flow-node').classed('success error', false);
+            }, 2000);
+          }, 500);
+        }
+
+        getRequestPath(endpoint) {
+          // Return the path through middleware based on endpoint
+          const basePath = ['frontend', 'api-lib', 'cors', 'request-id', 'auth'];
+
+          if (endpoint === '/health') {
+            // Health endpoint skips auth
+            return ['frontend', 'api-lib', 'cors', 'request-id', 'fastapi'];
+          }
+
+          return [...basePath, 'body-limit', 'fastapi', 'services'];
+        }
+
+        setupWebSocket() {
+          // In a real implementation, you'd set up WebSocket connection
+          // For now, we'll simulate with polling
+          this.pollForUpdates();
+        }
+
+        pollForUpdates() {
+          if (!this.isTracking) return;
+
+          // Simulate fetching new data
+          fetch('/api/calls')
+            .then(response => response.json())
+            .then(data => {
+              this.updateDashboard(data.calls);
+            })
+            .catch(error => {
+              console.error('Error fetching data:', error);
+            });
+
+          setTimeout(() => this.pollForUpdates(), 1000);
+        }
+
+        updateDashboard(calls) {
+          this.callData = calls;
+          this.updateStatistics();
+          this.updateCallLog();
+
+          // Animate the latest call
+          if (calls.length > 0) {
+            const latestCall = calls[calls.length - 1];
+            if (latestCall.id !== this.currentCallId) {
+              this.currentCallId = latestCall.id;
+              this.animateFlow(latestCall);
+            }
+          }
+        }
+
+        updateStatistics() {
+          const totalRequests = this.callData.filter(c => c.type === 'request').length;
+          const responses = this.callData.filter(c => c.type === 'response');
+          const successfulResponses = responses.filter(r => r.status >= 200 && r.status < 400);
+          const successRate =
+            responses.length > 0
+              ? Math.round((successfulResponses.length / responses.length) * 100)
+              : 100;
+
+          // Calculate average response time
+          const responseTimes = responses
+            .filter(r => r.timing && r.timing.completed)
+            .map(r => r.timing.completed - (r.timing.started || r.timing.completed - 100));
+          const avgResponseTime =
+            responseTimes.length > 0
+              ? Math.round(responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length)
+              : 0;
+
+          // Calculate requests per minute
+          const now = Date.now();
+          const oneMinuteAgo = now - 60000;
+          const recentRequests = this.callData.filter(
+            c => c.type === 'request' && new Date(c.timestamp).getTime() > oneMinuteAgo
+          );
+
+          document.getElementById('total-requests').textContent = totalRequests;
+          document.getElementById('success-rate').textContent = `${successRate}%`;
+          document.getElementById('avg-response-time').textContent = `${avgResponseTime}ms`;
+          document.getElementById('requests-per-minute').textContent = recentRequests.length;
+        }
+
+        updateCallLog() {
+          const logContainer = document.getElementById('call-log');
+          const recentCalls = this.callData.slice(-20).reverse();
+
+          if (recentCalls.length === 0) {
+            logContainer.innerHTML = `
+                        <p style="color: #8b949e; text-align: center; margin-top: 50px;">
+                            No API calls yet...<br>
+                            Start the tracker and interact with DinoAir GUI
+                        </p>
+                    `;
+            return;
+          }
+
+          logContainer.innerHTML = recentCalls
+            .map(call => {
+              const timestamp = new Date(call.timestamp).toLocaleTimeString();
+              const emoji = this.getEndpointEmoji(call.path);
+              const entryClass =
+                call.type === 'failed'
+                  ? 'error'
+                  : call.type === 'response'
+                    ? 'response'
+                    : 'request';
+
+              let statusInfo = '';
+              if (call.type === 'response') {
+                const statusColor =
+                  call.status < 300 ? '#28a745' : call.status < 500 ? '#f39c12' : '#dc3545';
+                statusInfo = `<span style="color: ${statusColor};">${call.status}</span>`;
+              }
+
+              return `
+                        <div class="call-entry ${entryClass}">
+                            <div class="timestamp">${timestamp}</div>
+                            <div>
+                                ${emoji}
+                                <span class="method-badge">${call.method}</span>
+                                ${call.path || new URL(call.url).pathname}
+                                ${statusInfo}
+                            </div>
+                            ${
+                              call.headers && call.headers['x-trace-id']
+                                ? `<div style="font-size: 0.8em; color: #8b949e; margin-top: 4px;">
+                                    Trace: ${call.headers['x-trace-id']}
+                                </div>`
+                                : ''
+                            }
+                            ${
+                              call.failureText
+                                ? `<div class="error-message">${call.failureText}</div>`
+                                : ''
+                            }
+                        </div>
+                    `;
+            })
+            .join('');
+        }
+
+        getEndpointEmoji(path) {
+          if (!path) return '🔗';
+          if (path === '/health') return '❤️';
+          if (path === '/chat') return '💬';
+          if (path.startsWith('/rag/')) return '🔍';
+          if (path.startsWith('/search/')) return '🔎';
+          if (path.startsWith('/tools/')) return '🛠️';
+          if (path === '/translate') return '🌐';
+          if (path === '/metrics') return '📊';
+          return '🔗';
+        }
+
+        showNodeDetails(node) {
+          alert(`Node: ${node.name}\nType: ${node.type}\nID: ${node.id}`);
+        }
+
+        start() {
+          this.isTracking = true;
+          document.getElementById('tracking-status').textContent = 'Tracking...';
+          document.getElementById('start-btn').disabled = true;
+          document.getElementById('stop-btn').disabled = false;
+          this.pollForUpdates();
+        }
+
+        stop() {
+          this.isTracking = false;
+          document.getElementById('tracking-status').textContent = 'Stopped';
+          document.getElementById('start-btn').disabled = false;
+          document.getElementById('stop-btn').disabled = true;
+        }
+
+        clear() {
+          this.callData = [];
+          this.updateStatistics();
+          this.updateCallLog();
+          d3.selectAll('.flow-node').classed('active success error', false);
+          d3.selectAll('.flow-link').classed('active', false);
+        }
+
+        export() {
+          const data = {
+            timestamp: new Date().toISOString(),
+            callData: this.callData,
+            statistics: {
+              totalRequests: this.callData.filter(c => c.type === 'request').length,
+              totalResponses: this.callData.filter(c => c.type === 'response').length,
+              errors: this.callData.filter(c => c.type === 'failed').length,
+            },
+          };
+
+          const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `dinoair-api-tracking-${Date.now()}.json`;
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+      }
+
+      // Global instance
+      const visualizer = new APIFlowVisualizer();
+
+      // Control functions
+      function startTracking() {
+        visualizer.start();
+      }
+
+      function stopTracking() {
+        visualizer.stop();
+      }
+
+      function clearLog() {
+        visualizer.clear();
+      }
+
+      function exportData() {
+        visualizer.export();
+      }
+
+      // Initialize
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log('DinoAir API Flow Visualizer loaded');
+      });
+    </script>
+  </body>
+</html>

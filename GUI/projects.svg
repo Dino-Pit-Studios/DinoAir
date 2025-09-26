@@ -1,0 +1,144 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 900" width="1440" height="900" fill="none">
+  <rect width="1440" height="900" fill="#1a1a2e"></rect>
+  <g opacity="100%">
+    <rect x="0" y="0" width="1426" height="64" fill="#16213e" filter="url(#filter_dshadow_0_0_0_00000014)"></rect>
+    <rect x="0" y="64" width="1426" height="0" fill="#374151"></rect>
+  </g>
+  <g opacity="100%">
+    <rect x="0" y="63.122807" width="1426" height="0.877193" fill="#374151" rx="0" filter="url(#filter_dshadow_0_0_0_00000014)"></rect>
+  </g>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" width="16" height="16" fill="#32bc9b" x="24.5" y="22" opacity="100%">
+    <path d="M384 320H256c-17.67 0-32 14.33-32 32v128c0 17.67 14.33 32 32 32h128c17.67 0 32-14.33 32-32V352c0-17.67-14.33-32-32-32zM192 32c0-17.67-14.33-32-32-32H32C14.33 0 0 14.33 0 32v128c0 17.67 14.33 32 32 32h95.72l73.16 128.04C211.98 300.98 232.4 288 256 288h.28L192 175.51V128h224V64H192V32zM608 0H480c-17.67 0-32 14.33-32 32v128c0 17.67 14.33 32 32 32h128c17.67 0 32-14.33 32-32V32c0-17.67-14.33-32-32-32z"></path>
+  </svg>
+  <g opacity="100%" mask="url(#mask_ajnslo3nsg)">
+    <text x="51" y="38.5" font-family="Roboto" font-size="24" fill="#fff" letter-spacing="0" font-weight="700" font-style="normal">DinoAir Project</text>
+    <text x="51" y="70.5" font-family="Roboto" font-size="24" fill="#fff" letter-spacing="0" font-weight="700" font-style="normal">Management</text>
+    <defs>
+      <mask id="mask_ajnslo3nsg">
+        <rect x="51" y="14" width="312" height="33" fill="white"></rect>
+      </mask>
+    </defs>
+  </g>
+  <g opacity="100%">
+    <rect filter="url(#filter_dshadow_0_0_0_00000014)" x="30" y="89" width="454" height="31" fill="#15213e" rx="15.5" stroke="#e5e7eb" stroke-width="0"></rect>
+    <text x="38" y="109" font-family="Roboto" font-size="13" fill="#94a3b8" letter-spacing="0" font-weight="normal" font-style="normal">
+      <tspan>Search Projects...</tspan>
+    </text>
+  </g>
+  <g opacity="100%">
+    <rect x="30" y="146" width="438" height="152" fill="#0f3460" stroke="#e5e7eb" stroke-width="0" rx="8" filter="url(#filter_dshadow_6_0_4_0000001a)"></rect>
+  </g>
+  <g opacity="100%">
+    <text x="46" y="184.5" font-family="Roboto" font-size="24" fill="#fff" letter-spacing="0" font-weight="700" font-style="normal">Project Alpha</text>
+  </g>
+  <g opacity="100%">
+    <text x="46" y="216" font-family="Roboto" font-size="18" fill="#fff" letter-spacing="0" font-weight="500" font-style="normal">Status: In Progress</text>
+  </g>
+  <g opacity="100%">
+    <rect filter="url(#filter_dshadow_0_0_0_00000014)" x="46" y="246" width="150" height="36" fill="#16213e" stroke="#e5e7eb" stroke-width="0" rx="18"></rect>
+    <text x="53.5" y="268.5" font-family="Roboto" font-size="14" fill="#fff" letter-spacing="0" font-weight="normal" font-style="normal">
+      <tspan>View Project Artifacts</tspan>
+    </text>
+  </g>
+  <g opacity="100%">
+    <rect filter="url(#filter_dshadow_0_0_0_00000014)" x="206" y="246" width="150" height="36" fill="#16213e" stroke="#e5e7eb" stroke-width="0" rx="18"></rect>
+    <text x="218.5" y="268.5" font-family="Roboto" font-size="14" fill="#fff" letter-spacing="0" font-weight="normal" font-style="normal">
+      <tspan>View Meeting Notes</tspan>
+    </text>
+  </g>
+  <g opacity="100%">
+    <rect x="492" y="146" width="438" height="152" fill="#0f3460" stroke="#e5e7eb" stroke-width="0" rx="8" filter="url(#filter_dshadow_6_0_4_0000001a)"></rect>
+  </g>
+  <g opacity="100%">
+    <text x="508" y="184.5" font-family="Roboto" font-size="24" fill="#fff" letter-spacing="0" font-weight="700" font-style="normal">Project Beta</text>
+  </g>
+  <g opacity="100%">
+    <text x="508" y="216" font-family="Roboto" font-size="18" fill="#fff" letter-spacing="0" font-weight="500" font-style="normal">Status: Completed</text>
+  </g>
+  <g opacity="100%">
+    <rect filter="url(#filter_dshadow_0_0_0_00000014)" x="508" y="246" width="150" height="36" fill="#16213e" stroke="#e5e7eb" stroke-width="0" rx="18"></rect>
+    <text x="515.5" y="268.5" font-family="Roboto" font-size="14" fill="#fff" letter-spacing="0" font-weight="normal" font-style="normal">
+      <tspan>View Project Artifacts</tspan>
+    </text>
+  </g>
+  <g opacity="100%">
+    <rect filter="url(#filter_dshadow_0_0_0_00000014)" x="668" y="246" width="150" height="36" fill="#16213e" stroke="#e5e7eb" stroke-width="0" rx="18"></rect>
+    <text x="680.5" y="268.5" font-family="Roboto" font-size="14" fill="#fff" letter-spacing="0" font-weight="normal" font-style="normal">
+      <tspan>View Meeting Notes</tspan>
+    </text>
+  </g>
+  <g opacity="100%">
+    <rect x="954" y="146" width="438" height="152" fill="#0f3460" stroke="#e5e7eb" stroke-width="0" rx="8" filter="url(#filter_dshadow_6_0_4_0000001a)"></rect>
+  </g>
+  <g opacity="100%">
+    <text x="970" y="184.5" font-family="Roboto" font-size="24" fill="#fff" letter-spacing="0" font-weight="700" font-style="normal">Project Gamma</text>
+  </g>
+  <g opacity="100%">
+    <text x="970" y="216" font-family="Roboto" font-size="18" fill="#fff" letter-spacing="0" font-weight="500" font-style="normal">Status: Archived</text>
+  </g>
+  <g opacity="100%">
+    <rect filter="url(#filter_dshadow_0_0_0_00000014)" x="970" y="246" width="150" height="36" fill="#16213e" stroke="#e5e7eb" stroke-width="0" rx="18"></rect>
+    <text x="977.5" y="268.5" font-family="Roboto" font-size="14" fill="#fff" letter-spacing="0" font-weight="normal" font-style="normal">
+      <tspan>View Project Artifacts</tspan>
+    </text>
+  </g>
+  <g opacity="100%">
+    <rect filter="url(#filter_dshadow_0_0_0_00000014)" x="1130" y="246" width="150" height="36" fill="#16213e" stroke="#e5e7eb" stroke-width="0" rx="18"></rect>
+    <text x="1142.5" y="268.5" font-family="Roboto" font-size="14" fill="#fff" letter-spacing="0" font-weight="normal" font-style="normal">
+      <tspan>View Meeting Notes</tspan>
+    </text>
+  </g>
+  <g opacity="100%">
+    <text x="1090" y="38" font-family="Roboto" font-size="20" fill="#fff" letter-spacing="0" font-weight="600" font-style="normal">Dashboard</text>
+  </g>
+  <g opacity="100%">
+    <text x="1203" y="38" font-family="Roboto" font-size="20" fill="#fff" letter-spacing="0" font-weight="600" font-style="normal">My Projects</text>
+  </g>
+  <g opacity="100%">
+    <text x="1327" y="38" font-family="Roboto" font-size="20" fill="#fff" letter-spacing="0" font-weight="600" font-style="normal">Settings</text>
+  </g>
+  <g opacity="100%">
+    <rect filter="url(#filter_dshadow_0_0_0_00000014)" x="1239" y="86" width="154" height="36" fill="#ff784b" stroke="#e5e7eb" stroke-width="0" rx="18"></rect>
+    <text x="1255.5" y="108.5" font-family="Roboto" font-size="14" fill="#fff" letter-spacing="0" font-weight="700" font-style="normal">
+      <tspan>Create New Project</tspan>
+    </text>
+  </g>
+  <g opacity="100%">
+    <rect filter="url(#filter_dshadow_0_0_0_00000014)" x="1094" y="246" width="103" height="36" fill="#16213e" stroke="#e5e7eb" stroke-width="0" rx="18"></rect>
+    <text x="1110" y="268.5" font-family="Roboto" font-size="14" fill="#fff" letter-spacing="0" font-weight="normal" font-style="normal">
+      <tspan>View Notes</tspan>
+    </text>
+  </g>
+  <g opacity="100%">
+    <rect filter="url(#filter_dshadow_0_0_0_00000014)" x="1239" y="246" width="103" height="36" fill="#16213e" stroke="#e5e7eb" stroke-width="0" rx="18"></rect>
+    <text x="1269" y="268.5" font-family="Roboto" font-size="14" fill="#fff" letter-spacing="0" font-weight="normal" font-style="normal">
+      <tspan>Cancel</tspan>
+    </text>
+  </g>
+  <defs>
+    <filter id="filter_dshadow_0_0_0_00000014" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feFlood flood-opacity="0" result="bg-fix"></feFlood>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="alpha"></feColorMatrix>
+      <feOffset dx="0" dy="0"></feOffset>
+      <feGaussianBlur stdDeviation="0"></feGaussianBlur>
+      <feComposite in2="alpha" operator="out"></feComposite>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0"></feColorMatrix>
+      <feBlend mode="normal" in2="bg-fix" result="bg-fix-filter_dshadow_0_0_0_00000014"></feBlend>
+      <feBlend in="SourceGraphic" in2="bg-fix-filter_dshadow_0_0_0_00000014" result="shape"></feBlend>
+    </filter>
+    <filter id="filter_dshadow_6_0_4_0000001a" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feFlood flood-opacity="0" result="bg-fix"></feFlood>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="alpha"></feColorMatrix>
+      <feOffset dx="0" dy="4"></feOffset>
+      <feGaussianBlur stdDeviation="3"></feGaussianBlur>
+      <feComposite in2="alpha" operator="out"></feComposite>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"></feColorMatrix>
+      <feBlend mode="normal" in2="bg-fix" result="bg-fix-filter_dshadow_6_0_4_0000001a"></feBlend>
+      <feBlend in="SourceGraphic" in2="bg-fix-filter_dshadow_6_0_4_0000001a" result="shape"></feBlend>
+    </filter>
+    <style id="google">@import url(https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap);
+</style>
+    <style id="brand"></style>
+  </defs>
+</svg>

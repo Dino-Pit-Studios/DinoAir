@@ -1,0 +1,102 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 901" width="1440" height="901" fill="none">
+  <rect width="1440" height="901" fill="#1a1a2e"></rect>
+  <g opacity="100%">
+    <rect x="0" y="0" width="1426" height="60" fill="#16213e" filter="url(#filter_dshadow_0_0_0_00000014)"></rect>
+    <rect x="0" y="60" width="1426" height="0" fill="#e5e7eb"></rect>
+  </g>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="21" height="21" fill="#fff" x="23" y="19" opacity="100%">
+    <path d="M487.4 315.7l-42.6-24.6c4.3-23.2 4.3-47 0-70.2l42.6-24.6c4.9-2.8 7.1-8.6 5.5-14-11.1-35.6-30-67.8-54.7-94.6-3.8-4.1-10-5.1-14.8-2.3L380.8 110c-17.9-15.4-38.5-27.3-60.8-35.1V25.8c0-5.6-3.9-10.5-9.4-11.7-36.7-8.2-74.3-7.8-109.2 0-5.5 1.2-9.4 6.1-9.4 11.7V75c-22.2 7.9-42.8 19.8-60.8 35.1L88.7 85.5c-4.9-2.8-11-1.9-14.8 2.3-24.7 26.7-43.6 58.9-54.7 94.6-1.7 5.4.6 11.2 5.5 14L67.3 221c-4.3 23.2-4.3 47 0 70.2l-42.6 24.6c-4.9 2.8-7.1 8.6-5.5 14 11.1 35.6 30 67.8 54.7 94.6 3.8 4.1 10 5.1 14.8 2.3l42.6-24.6c17.9 15.4 38.5 27.3 60.8 35.1v49.2c0 5.6 3.9 10.5 9.4 11.7 36.7 8.2 74.3 7.8 109.2 0 5.5-1.2 9.4-6.1 9.4-11.7v-49.2c22.2-7.9 42.8-19.8 60.8-35.1l42.6 24.6c4.9 2.8 11 1.9 14.8-2.3 24.7-26.7 43.6-58.9 54.7-94.6 1.5-5.5-.7-11.3-5.6-14.1zM256 336c-44.1 0-80-35.9-80-80s35.9-80 80-80 80 35.9 80 80-35.9 80-80 80z"></path>
+  </svg>
+  <g opacity="100%">
+    <text x="56" y="37.5" font-family="Roboto" font-size="24" fill="#fff" letter-spacing="0" font-weight="700" font-style="normal">Settings</text>
+  </g>
+  <g opacity="100%">
+    <rect filter="url(#filter_dshadow_0_0_0_00000014)" x="1280" y="12" width="122" height="36" fill="#32bc9b" stroke="#e5e7eb" stroke-width="0" rx="18"></rect>
+    <text x="1296.5" y="34.5" font-family="Roboto" font-size="14" fill="#fff" letter-spacing="0" font-weight="700" font-style="normal">
+      <tspan>Save Changes</tspan>
+    </text>
+  </g>
+  <g opacity="100%">
+    <rect x="23" y="83" width="1378" height="215" fill="#16213e" stroke="#e5e7eb" stroke-width="0" rx="8" filter="url(#filter_dshadow_6_0_4_0000001a)"></rect>
+  </g>
+  <g opacity="100%">
+    <text x="47" y="128" font-family="Roboto" font-size="20" fill="#fff" letter-spacing="0" font-weight="600" font-style="normal">General Settings</text>
+  </g>
+  <g opacity="100%">
+    <text x="47" y="169.5" font-family="Roboto" font-size="16" fill="#fff" letter-spacing="0" font-weight="500" font-style="normal">Memory Toggle</text>
+  </g>
+  <g opacity="100%">
+    <rect x="1327" y="151" width="50" height="25" fill="#d3d3d3" stroke="#e5e7eb" stroke-width="0" rx="12.5" filter="url(#filter_dshadow_0_0_0_00000014)"></rect>
+    <rect x="1330" y="154" width="19" height="19" fill="#1a1a2e" rx="9.5"></rect>
+  </g>
+  <g opacity="100%">
+    <text x="47" y="210.5" font-family="Roboto" font-size="16" fill="#fff" letter-spacing="0" font-weight="500" font-style="normal">Sensitive Data Mode</text>
+  </g>
+  <g opacity="100%">
+    <rect x="1327" y="192" width="50" height="25" fill="#d3d3d3" stroke="#e5e7eb" stroke-width="0" rx="12.5" filter="url(#filter_dshadow_0_0_0_00000014)"></rect>
+    <rect x="1330" y="195" width="19" height="19" fill="#1a1a2e" rx="9.5"></rect>
+  </g>
+  <g opacity="100%">
+    <text x="47" y="251.5" font-family="Roboto" font-size="16" fill="#fff" letter-spacing="0" font-weight="500" font-style="normal">No Internet Mode</text>
+  </g>
+  <g opacity="100%">
+    <rect x="1327" y="233" width="50" height="25" fill="#d3d3d3" stroke="#e5e7eb" stroke-width="0" rx="12.5" filter="url(#filter_dshadow_0_0_0_00000014)"></rect>
+    <rect x="1330" y="236" width="19" height="19" fill="#1a1a2e" rx="9.5"></rect>
+  </g>
+  <g opacity="100%">
+    <rect x="23" y="330" width="1378" height="212" fill="#16213e" stroke="#e5e7eb" stroke-width="0" rx="8" filter="url(#filter_dshadow_6_0_4_0000001a)"></rect>
+  </g>
+  <g opacity="100%">
+    <text x="47" y="375" font-family="Roboto" font-size="20" fill="#fff" letter-spacing="0" font-weight="600" font-style="normal">Advanced Settings</text>
+  </g>
+  <g opacity="100%">
+    <text x="47" y="415.5" font-family="Roboto" font-size="16" fill="#fff" letter-spacing="0" font-weight="500" font-style="normal">AI Assistance</text>
+  </g>
+  <g opacity="100%">
+    <rect x="1357" y="400" width="20" height="20" fill="#d3d3d3" rx="10" filter="url(#filter_dshadow_0_0_0_00000014)"></rect>
+  </g>
+  <g opacity="100%" mask="url(#mask_qdn9tpniwa)">
+    <text x="47" y="455.5" font-family="Roboto" font-size="16" fill="#fff" letter-spacing="0" font-weight="500" font-style="normal">Project Tracking</text>
+    <text x="47" y="479.5" font-family="Roboto" font-size="16" fill="#fff" letter-spacing="0" font-weight="500" font-style="normal">Notifications</text>
+    <defs>
+      <mask id="mask_qdn9tpniwa">
+        <rect x="47" y="438" width="213" height="24" fill="white"></rect>
+      </mask>
+    </defs>
+  </g>
+  <g opacity="100%">
+    <rect x="1357" y="440" width="20" height="20" fill="#d3d3d3" rx="5" filter="url(#filter_dshadow_0_0_0_00000014)"></rect>
+  </g>
+  <g opacity="100%">
+    <text x="47" y="495.5" font-family="Roboto" font-size="16" fill="#fff" letter-spacing="0" font-weight="500" font-style="normal">File Management Auto-Sync</text>
+  </g>
+  <g opacity="100%">
+    <rect x="1357" y="480" width="20" height="20" fill="#d3d3d3" rx="5" filter="url(#filter_dshadow_0_0_0_00000014)"></rect>
+  </g>
+  <defs>
+    <filter id="filter_dshadow_0_0_0_00000014" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feFlood flood-opacity="0" result="bg-fix"></feFlood>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="alpha"></feColorMatrix>
+      <feOffset dx="0" dy="0"></feOffset>
+      <feGaussianBlur stdDeviation="0"></feGaussianBlur>
+      <feComposite in2="alpha" operator="out"></feComposite>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0"></feColorMatrix>
+      <feBlend mode="normal" in2="bg-fix" result="bg-fix-filter_dshadow_0_0_0_00000014"></feBlend>
+      <feBlend in="SourceGraphic" in2="bg-fix-filter_dshadow_0_0_0_00000014" result="shape"></feBlend>
+    </filter>
+    <filter id="filter_dshadow_6_0_4_0000001a" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feFlood flood-opacity="0" result="bg-fix"></feFlood>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="alpha"></feColorMatrix>
+      <feOffset dx="0" dy="4"></feOffset>
+      <feGaussianBlur stdDeviation="3"></feGaussianBlur>
+      <feComposite in2="alpha" operator="out"></feComposite>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"></feColorMatrix>
+      <feBlend mode="normal" in2="bg-fix" result="bg-fix-filter_dshadow_6_0_4_0000001a"></feBlend>
+      <feBlend in="SourceGraphic" in2="bg-fix-filter_dshadow_6_0_4_0000001a" result="shape"></feBlend>
+    </filter>
+    <style id="google">@import url(https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap);
+</style>
+    <style id="brand"></style>
+  </defs>
+</svg>
