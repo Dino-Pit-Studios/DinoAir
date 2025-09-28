@@ -224,7 +224,6 @@ class SimpleGitHubSecurityLoader:
         # NOTE: Vulnerability alerts count not logged to avoid exposing sensitive details
         # print(f"   - Vulnerability Alerts: {security_data['summary']['total_vulnerability_alerts']}")
 
-
         return security_data
 
     def save_to_file(self, data: dict[str, Any], filename: str = "security_data.json"):
