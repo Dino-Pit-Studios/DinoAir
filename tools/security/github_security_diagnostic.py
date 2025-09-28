@@ -141,15 +141,23 @@ class GitHubSecurityDiagnostic:
                 ).get("status"),
             }
 
+            # Explicit whitelist of feature names to ensure only known/safe features are logged
+            security_feature_list = (
+                "advanced_security",
+                "secret_scanning",
+                "secret_scanning_push_protection",
+                "dependabot_security_updates",
+                "private_vulnerability_reporting",
+            )
+
             print("🔒 Security Features Status:")
-            for feature, status in features.items():
+            for feature in security_feature_list:
+                status = features.get(feature)
                 status_icon = (
                     "✅" if status == "enabled" else "❌" if status == "disabled" else "❓"
                 )
-                # Avoid logging raw status value (potentially sensitive)
                 print(f"   {status_icon} {feature.replace('_', ' ').title()}")
                 # If detailed status is necessary for privileged contexts, handle it separately (not in logs)
-
             return features
 
         except Exception as e:
