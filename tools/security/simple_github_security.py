@@ -216,9 +216,9 @@ class SimpleGitHubSecurityLoader:
 
         # Print summary
         print("\n📊 Security Summary:")
-        print(
-            f"   - Code Scanning Alerts: {security_data['summary']['total_code_scanning_alerts']}"
-        )
+        # Do NOT log code scanning alert counts, as even counts can be sensitive.
+        # print(f"   - Code Scanning Alerts: {security_data['summary']['total_code_scanning_alerts']}")
+        
         # Note: Secret scanning alerts are available but not displayed for security reasons
         # print(f"   - Dependabot Alerts: {security_data['summary']['total_dependabot_alerts']}")
         # NOTE: Vulnerability alerts count not logged to avoid exposing sensitive details
