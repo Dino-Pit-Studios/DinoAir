@@ -62,7 +62,7 @@ class MockModel(BaseTranslationModel):
         # RNG: secure for non-deterministic runs, deterministic for tests
         # Deterministic mode uses a fixed seed for stable outputs
         self._rng = (
-            random.Random(1337)
+            self._rng = random.Random(secrets.randbits(128)) if self.config.get("deterministic", True) else secrets.SystemRandom()
             if self.config.get("deterministic", True)
             else secrets.SystemRandom()
         )
