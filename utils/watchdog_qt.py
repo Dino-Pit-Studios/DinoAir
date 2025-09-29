@@ -14,15 +14,16 @@ class WatchdogController:
     """No-op placeholder for the old Qt watchdog controller."""
 
     def __init__(self, *_: object, **__: object) -> None:  # pragma: no cover - stub
-        pass
+        pass  # No-op stub for compatibility
 
     def start(self) -> None:  # pragma: no cover - stub
-        pass
+        pass  # No-op stub for compatibility
 
     def stop(self) -> None:  # pragma: no cover - stub
-        pass
+        pass  # No-op stub for compatibility
 
-    def get_current_metrics(self) -> dict[str, object]:  # pragma: no cover - stub
+    @staticmethod
+    def get_current_metrics() -> dict[str, object]:  # pragma: no cover - stub
         return {}
 
 

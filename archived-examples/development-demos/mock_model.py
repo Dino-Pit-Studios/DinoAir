@@ -130,7 +130,6 @@ class MockModel(BaseTranslationModel):
             **kwargs: Additional initialization parameters
         """
         # Parameters are unused for the mock implementation
-        del model_path, kwargs
         logger.info("Initializing mock model")
 
         # Simulate initialization delay

@@ -107,7 +107,8 @@ class ToolRegistry:
         """Initialize an empty internal tool registry."""
         self._tools: dict[str, Callable[..., Any]] = {}
 
-    def get_tool_schemas(self, requested_tools: list[str] | None = None) -> list[dict[str, Any]]:
+    @staticmethod
+    def get_tool_schemas(requested_tools: list[str] | None = None) -> list[dict[str, Any]]:
         """Return empty tool schemas for now."""
         return []
 
