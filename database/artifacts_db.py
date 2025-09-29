@@ -197,7 +197,7 @@ class ArtifactsDatabase:
             # Decrypt the content
             return self.encryption.decrypt_data(encrypted_data)
 
-        except (ValueError, TypeError, OSError, json.JSONDecodeError) as e:
+        except (ValueError, TypeError, OSError) as e:
             self.logger.error(f"Failed to decrypt file content: {e}")
             raise ValueError(f"Cannot decrypt file content: {e}") from e
 
