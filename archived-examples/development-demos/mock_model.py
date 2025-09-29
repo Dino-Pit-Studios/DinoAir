@@ -6,16 +6,16 @@ translation system without requiring actual model resources.
 """
 
 import logging
+import os
 import random
 import secrets
+
+# Ensure project root is in sys.path for absolute imports
+import sys
 import time
 from pathlib import Path
 from typing import Any
 
-# Ensure project root is in sys.path for absolute imports
-import sys
-import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 from tools.pseudocode_translator.models.base_model import (
     BaseTranslationModel,
     ModelCapabilities,
@@ -29,6 +29,8 @@ from tools.pseudocode_translator.models.model_factory import (
     ModelPriority,
     register_model,
 )
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 logger = logging.getLogger(__name__)
 
