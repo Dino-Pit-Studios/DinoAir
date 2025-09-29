@@ -2,7 +2,7 @@
 Simple, dependency-free adaptive chunk sizing benchmark simulation.
 
 This script simulates chunk processing with an AdaptiveChunkSizer controller, using
-a seeded RNG for determinism. It prints a JSON summary to stdout:
+ a seeded RNG for determinism. It prints a JSON summary to stdout:
 
 {
   "flag": true,
@@ -22,7 +22,6 @@ from __future__ import annotations
 import json
 import random  # nosec B311 - deterministic simulation only; not for cryptographic purposes
 import statistics
-import sys
 
 # Local import; no heavy deps
 from pseudocode_translator.streaming.adaptive import AdaptiveChunkSizer
