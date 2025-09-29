@@ -167,7 +167,7 @@ class MockModel(BaseTranslationModel):
             raise RuntimeError("Model not initialized")
 
         # Use default config if not provided
-        assert config is not None
+        if config is None: raise ValueError("config cannot be None")
 
         # Simulate processing delay
         if self.config["delay_ms"] > 0:
