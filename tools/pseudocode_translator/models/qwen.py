@@ -5,8 +5,8 @@ This module provides a Qwen 7B model implementation using llama-cpp-python.
 The model is optimized for code generation and instruction following.
 """
 
-import logging
 import ast
+import logging
 from pathlib import Path
 from typing import Any
 
