@@ -5,12 +5,6 @@ from collections.abc import Iterable, Mapping
 from contextlib import suppress
 from typing import TYPE_CHECKING, Any, cast
 
-# Type definitions for better type safety (aligned with core_router and routing schemas)
-JSONPrimitive = str | int | float | bool | None
-JSONValue = JSONPrimitive | dict[str, "JSONValue"] | list["JSONValue"]
-ValidationErrorDetail = dict[str, str | list[str]]
-ErrorDetails = JSONValue | list[ValidationErrorDetail] | None
-
 from fastapi.exceptions import RequestValidationError
 from pydantic import ValidationError
 from starlette import status
@@ -19,6 +13,13 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from core_router.errors import error_response as core_error_response
 
 from .metrics_state import inc_counter
+
+# Type definitions for better type safety (aligned with core_router and routing schemas)
+JSONPrimitive = str | int | float | bool | None
+JSONValue = JSONPrimitive | dict[str, "JSONValue"] | list["JSONValue"]
+ValidationErrorDetail = dict[str, str | list[str]]
+ErrorDetails = JSONValue | list[ValidationErrorDetail] | None
+
 
 if TYPE_CHECKING:
     from fastapi import FastAPI, Request
@@ -51,7 +52,9 @@ def _normalize_loc(v: JSONValue) -> list[str]:
     return []
 
 
-def _flatten_validation_errors(exc: ValidationError | RequestValidationError) -> list[dict[str, str | list[str]]]:
+def _flatten_validation_errors(
+    exc: ValidationError | RequestValidationError,
+) -> list[dict[str, str | list[str]]]:
     errors_attr = getattr(exc, "errors", None)
     if not callable(errors_attr):
         return []
