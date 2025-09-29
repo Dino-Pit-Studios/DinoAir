@@ -277,8 +277,8 @@ if __name__ == "__main__":
                         # Sanity check: import time should be reasonable
                         if 0 <= import_time <= 30:  # Max 30 seconds seems reasonable
                             return import_time
-                    except ValueError:
-                        pass
+                    except ValueError as e:
+                        self.logger.debug("Failed to parse import time for %s: %s", module_name, e)
 
                 # Cleanup temp file
                 Path(temp_file.name).unlink(missing_ok=True)

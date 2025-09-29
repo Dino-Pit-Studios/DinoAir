@@ -5,6 +5,7 @@ Provides comprehensive protection against SQL injection attacks.
 """
 
 import re
+import sqlite3
 from typing import Any, cast
 
 
@@ -281,7 +282,7 @@ class SafeSQL:
             connection.commit()
             return cursor.rowcount
 
-        except Exception as e:
+        except (sqlite3.Error, ValueError, TypeError) as e:
             connection.rollback()
             raise SafeSQLExecutionError(str(e)) from e
         finally:

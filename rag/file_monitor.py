@@ -405,7 +405,7 @@ class FileMonitor:
                 else:
                     raise Exception(result.get("error", "Unknown error"))
 
-            except Exception as e:
+            except (OSError, ValueError, RuntimeError) as e:
                 self.logger.error("Failed to process %s: %s", file_path, str(e))
 
                 # Call error callback
@@ -438,7 +438,7 @@ class FileMonitor:
                     if self._update_callback:
                         self._update_callback(file_path, "deleted")
 
-        except Exception as e:
+        except (OSError, ValueError, RuntimeError) as e:
             self.logger.error("Failed to remove %s from index: %s", file_path, str(e))
 
             # Call error callback
