@@ -6,6 +6,7 @@ The model is optimized for code generation and instruction following.
 """
 
 import logging
+import ast
 from pathlib import Path
 from typing import Any
 
@@ -283,9 +284,9 @@ class QwenModel(BaseModel):
         # Remove any remaining markdown artifacts
         code = code.replace("```python", "").replace("```", "")
 
-        # Basic syntax validation
+        # Basic syntax validation using AST parsing (safer than compile)
         try:
-            compile(code, "<generated>", "exec")
+            ast.parse(code, filename="<generated>")
         except SyntaxError as e:
             logger.warning("Generated code has syntax error: %s", e)
             # Try to fix common issues

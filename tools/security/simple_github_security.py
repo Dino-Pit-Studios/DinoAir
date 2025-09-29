@@ -21,6 +21,8 @@ class SimpleGitHubSecurityLoader:
 
     def __init__(self, token: str | None = None):
         """Initialize with GitHub token."""
+        # Default network timeout (seconds) for all outbound requests
+        self.DEFAULT_TIMEOUT: int = 30
         self.token = token or os.getenv("GITHUB_TOKEN")
         if not self.token:
             raise ValueError("GitHub token required. Set GITHUB_TOKEN environment variable.")
@@ -74,7 +76,7 @@ class SimpleGitHubSecurityLoader:
         """Get security features status using direct API call."""
         try:
             url = f"https://api.github.com/repos/{repo_name}"
-            response = requests.get(url, headers=self.headers)
+            response = requests.get(url, headers=self.headers, timeout=self.DEFAULT_TIMEOUT)
             if response.status_code == 200:
                 data = response.json()
                 security_analysis = data.get("security_and_analysis", {})
@@ -100,7 +102,7 @@ class SimpleGitHubSecurityLoader:
         """Get code scanning alerts using direct API call."""
         try:
             url = f"https://api.github.com/repos/{repo_name}/code-scanning/alerts"
-            response = requests.get(url, headers=self.headers)
+            response = requests.get(url, headers=self.headers, timeout=self.DEFAULT_TIMEOUT)
 
             if response.status_code == 200:
                 alerts = response.json()
@@ -120,7 +122,7 @@ class SimpleGitHubSecurityLoader:
         """Get secret scanning alerts using direct API call."""
         try:
             url = f"https://api.github.com/repos/{repo_name}/secret-scanning/alerts"
-            response = requests.get(url, headers=self.headers)
+            response = requests.get(url, headers=self.headers, timeout=self.DEFAULT_TIMEOUT)
 
             if response.status_code == 200:
                 alerts = response.json()
@@ -140,7 +142,7 @@ class SimpleGitHubSecurityLoader:
         """Get Dependabot alerts using direct API call."""
         try:
             url = f"https://api.github.com/repos/{repo_name}/dependabot/alerts"
-            response = requests.get(url, headers=self.headers)
+            response = requests.get(url, headers=self.headers, timeout=self.DEFAULT_TIMEOUT)
 
             if response.status_code == 200:
                 alerts = response.json()
@@ -244,11 +246,11 @@ def main():
         loader = SimpleGitHubSecurityLoader()
 
         # Get security data for DinoAir repository
-        repo_name = "dinoopitstudios/DinoAir"
+        repo_name = "dinopitstudios-llc/DinoAir"
         security_data = loader.get_all_security_data(repo_name)
 
         # Save to file
-        loader.save_to_file(security_data, "dinoair_security_data.json")
+        loader.save_to_file(security_data, "security_data.json")
 
         return security_data
 

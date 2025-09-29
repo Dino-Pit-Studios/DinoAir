@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import functools
 import logging
-import random
+import secrets
 import threading
 import time
 from collections import defaultdict, deque
@@ -104,7 +104,9 @@ class PerformanceMonitor:
         """Determine if this operation should be sampled."""
         if not self.config.enabled:
             return False
-        return self.config.sampling_rate >= 1.0 or random.random() < self.config.sampling_rate
+        # Use a cryptographically secure RNG when sampling might gate security-sensitive telemetry
+        rng = secrets.SystemRandom()
+        return self.config.sampling_rate >= 1.0 or rng.random() < self.config.sampling_rate
 
     def _collect_system_metrics(self) -> dict[str, Any]:
         """Collect current system metrics."""
