@@ -1,9 +1,12 @@
 """Sentry integration for error tracking and monitoring."""
 
+import logging
 import os
 
 import sentry_sdk
 from fastapi import FastAPI
+
+logger = logging.getLogger(__name__)
 
 
 def _get_sentry_dsn() -> str | None:
@@ -14,8 +17,8 @@ def _get_sentry_dsn() -> str | None:
         try:
             with open(dsn_file, encoding="utf-8") as f:
                 return f.read().strip()
-        except Exception:
-            pass
+        except OSError as e:
+            logger.warning("Could not read Sentry DSN from file %s: %s", dsn_file, e)
 
     # Fallback to environment variable
     return os.getenv("SENTRY_DSN")

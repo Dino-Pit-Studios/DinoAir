@@ -167,7 +167,7 @@ class ArtifactsDatabase:
 
             return encrypted_json, {k: str(v) for k, v in metadata.items()} if metadata else None
 
-        except Exception as e:
+        except (ValueError, TypeError, OSError) as e:
             self.logger.error(f"Failed to encrypt file content: {e}")
             # Fall back to unencrypted storage
             return content, None
@@ -197,7 +197,7 @@ class ArtifactsDatabase:
             # Decrypt the content
             return self.encryption.decrypt_data(encrypted_data)
 
-        except Exception as e:
+        except (ValueError, TypeError, OSError) as e:
             self.logger.error(f"Failed to decrypt file content: {e}")
             raise ValueError(f"Cannot decrypt file content: {e}") from e
 
@@ -337,7 +337,7 @@ class ArtifactsDatabase:
         except sqlite3.Error as e:
             self.logger.error(f"Database error creating artifact: {e}")
             raise RuntimeError(f"Failed to create artifact: {e}") from e
-        except Exception as e:
+        except (ValueError, TypeError, OSError) as e:
             self.logger.error(f"Unexpected error creating artifact: {e}")
             raise RuntimeError(f"Failed to create artifact: {e}") from e
 
