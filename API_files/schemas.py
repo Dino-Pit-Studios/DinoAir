@@ -2,8 +2,13 @@ from __future__ import annotations
 
 from enum import Enum
 from typing import Any, cast
+from collections.abc import Sequence
 
 from pydantic import BaseModel, Field, field_validator
+
+# Type definitions for better type safety (aligned with core_router and routing schemas)
+JSONPrimitive = str | int | float | bool | None
+JSONValue = JSONPrimitive | dict[str, "JSONValue"] | list["JSONValue"]
 
 # Shared validation messages
 QUERY_EMPTY_ERROR = "query must not be empty"
@@ -93,10 +98,10 @@ class TranslateResponse(BaseModel):
         default_factory=lambda: cast("list[str]", []),
         description=("List of warning messages (bounded to 50 elements; each up to 500 chars)"),
     )
-    metadata: dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, JSONValue] = Field(default_factory=dict)
 
     @staticmethod
-    def _validate_str_list(values: list[Any], field_name: str) -> list[str]:
+    def _validate_str_list(values: Sequence[JSONValue], field_name: str) -> list[str]:
         if len(values) > 50:
             raise ValueError(f"{field_name} length must be <= 50")
         for s in values:
@@ -136,7 +141,7 @@ class VectorSearchHit(BaseModel):
     start_pos: int
     end_pos: int
     file_type: str | None = None
-    metadata: dict[str, Any] | None = None
+    metadata: dict[str, JSONValue] | None = None
 
 
 class VectorSearchRequest(BaseModel):
@@ -285,7 +290,7 @@ class ChatRequest(BaseModel):
         default=None,
         description=("Optional model name (LM Studio may use env default)."),
     )
-    extra_params: dict[str, Any] | None = Field(
+    extra_params: dict[str, JSONValue] | None = Field(
         default=None,
         description=(
             "Adapter extra params (e.g., {'router_tags':['chat','lmstudio'], 'prepend_router_metadata': true, 'temperature': 0.3})."
@@ -308,7 +313,7 @@ class ChatResponse(BaseModel):
     finish_reason: str | None = None
     model: str | None = None
     usage: dict[str, int] | None = None
-    metadata: dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, JSONValue] = Field(default_factory=dict)
 
 
 # -----------------------
