@@ -1,9 +1,15 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from contextlib import suppress
 from typing import TYPE_CHECKING, Any, cast
+
+# Type definitions for better type safety (aligned with core_router and routing schemas)
+JSONPrimitive = str | int | float | bool | None
+JSONValue = JSONPrimitive | dict[str, "JSONValue"] | list["JSONValue"]
+ValidationErrorDetail = dict[str, str | list[str]]
+ErrorDetails = JSONValue | list[ValidationErrorDetail] | None
 
 from fastapi.exceptions import RequestValidationError
 from pydantic import ValidationError
@@ -36,22 +42,22 @@ def _trace_id_from_request(request: Request) -> str:
     return header_rid if isinstance(header_rid, str) else ""
 
 
-def _normalize_loc(v: Any) -> list[str]:
+def _normalize_loc(v: JSONValue) -> list[str]:
     # Treat strings as a single location element instead of an iterable of chars
     if isinstance(v, str):
         return [v]
     if isinstance(v, Iterable):
-        return [str(x) for x in cast("Iterable[Any]", v)]
+        return [str(x) for x in cast("Iterable[JSONValue]", v)]
     return []
 
 
-def _flatten_validation_errors(exc: Any) -> list[dict[str, Any]]:
+def _flatten_validation_errors(exc: ValidationError | RequestValidationError) -> list[dict[str, str | list[str]]]:
     errors_attr = getattr(exc, "errors", None)
     if not callable(errors_attr):
         return []
-    raw: Any = []
+    raw: JSONValue = []
     with suppress(Exception):
-        raw = errors_attr()
+        raw = cast("JSONValue", errors_attr())
     if not isinstance(raw, Iterable):
         return []
     return [
@@ -60,7 +66,7 @@ def _flatten_validation_errors(exc: Any) -> list[dict[str, Any]]:
             "msg": str(e.get("msg", "")),
             "type": str(e.get("type", "")),
         }
-        for e in cast("Iterable[Mapping[str, Any]]", raw)
+        for e in cast("Iterable[Mapping[str, JSONValue]]", raw)
     ]
 
 
@@ -102,7 +108,7 @@ def _json_error_response(
     code: str,
     error: str,
     message: str,
-    details: Any | None = None,
+    details: ErrorDetails = None,
 ) -> JSONResponse:
     # Derive identifiers and context
     # Use unified helper that prefers scope 'trace_id', then headers
@@ -128,7 +134,7 @@ def _json_error_response(
     )
 
 
-def http_exception_handler(request: Request, exc: Exception):
+def http_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     exc_obj = cast("StarletteHTTPException", exc)
     status_code = exc_obj.status_code or status.HTTP_500_INTERNAL_SERVER_ERROR
     message = str(exc_obj.detail)
@@ -173,7 +179,7 @@ def http_exception_handler(request: Request, exc: Exception):
     )
 
 
-def request_validation_exception_handler(request: Request, exc: Exception):
+def request_validation_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     exc_obj = cast("RequestValidationError", exc)
     status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
     errors = _flatten_validation_errors(exc_obj)
@@ -202,7 +208,7 @@ def request_validation_exception_handler(request: Request, exc: Exception):
     )
 
 
-def validation_exception_handler(request: Request, exc: Exception):
+def validation_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     exc_obj = cast("ValidationError", exc)
     status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
     errors = _flatten_validation_errors(exc_obj)
@@ -231,7 +237,7 @@ def validation_exception_handler(request: Request, exc: Exception):
     )
 
 
-def unhandled_exception_handler(request: Request, _exc: Exception):
+def unhandled_exception_handler(request: Request, _exc: Exception) -> JSONResponse:
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
 
     _record_metrics(status_code)

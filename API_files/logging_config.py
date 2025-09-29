@@ -25,7 +25,12 @@ except ImportError:  # pragma: no cover
 ASGIApp = Callable[[Scope, Receive, Send], Awaitable[None]]
 
 T = TypeVar("T")
-JSONLike = str | dict[Any, Any] | list[Any] | tuple[Any, ...]
+
+# Type definitions for better type safety (aligned with core_router and routing schemas)
+JSONPrimitive = str | int | float | bool | None
+JSONValue = JSONPrimitive | dict[str, "JSONValue"] | list["JSONValue"]
+LogStructure = dict[str, JSONValue] | list[JSONValue] | tuple[JSONValue, ...]
+JSONLike = str | LogStructure
 
 
 @dataclass(frozen=True)
@@ -98,13 +103,13 @@ class RedactionService:
             return cast("T", self.redact_text(value))
 
         if isinstance(value, dict):
-            return cast("T", self._redact_dict(cast("dict[Any, Any]", value)))
+            return cast("T", self._redact_dict(cast("dict[str, JSONValue]", value)))
 
         if isinstance(value, list):
-            return cast("T", self._redact_list(cast("list[Any]", value)))
+            return cast("T", self._redact_list(cast("list[JSONValue]", value)))
 
         if isinstance(value, tuple):
-            return cast("T", self._redact_tuple(cast("tuple[Any, ...]", value)))
+            return cast("T", self._redact_tuple(cast("tuple[JSONValue, ...]", value)))
 
         return value
 
@@ -131,16 +136,16 @@ class RedactionService:
             The redacted object
         """
         if isinstance(obj, dict):
-            return self._redact_dict(obj)
+            return self._redact_dict(cast("dict[str, JSONValue]", obj))
         if isinstance(obj, list):
-            return self._redact_list(obj)
+            return self._redact_list(cast("list[JSONValue]", obj))
         if isinstance(obj, tuple):
-            return self._redact_tuple(obj)
+            return self._redact_tuple(cast("tuple[JSONValue, ...]", obj))
         return self.redact_text(str(obj))
 
-    def _redact_dict(self, obj: dict[Any, Any]) -> dict[Any, Any]:
+    def _redact_dict(self, obj: dict[str, JSONValue]) -> dict[str, JSONValue]:
         """Redact dictionary values, with special handling for auth headers."""
-        redacted_dict: dict[Any, Any] = {
+        redacted_dict: dict[str, JSONValue] = {
             k: (
                 self.config.redacted_placeholder
                 if isinstance(k, str) and k.lower() == self.config.auth_header_lower
@@ -150,11 +155,11 @@ class RedactionService:
         }
         return redacted_dict
 
-    def _redact_list(self, obj: list[Any]) -> list[Any]:
+    def _redact_list(self, obj: list[JSONValue]) -> list[JSONValue]:
         """Redact list values."""
         return [self.redact_value(v) for v in obj]
 
-    def _redact_tuple(self, obj: tuple[Any, ...]) -> tuple[Any, ...]:
+    def _redact_tuple(self, obj: tuple[JSONValue, ...]) -> tuple[JSONValue, ...]:
         """Redact tuple values."""
         return tuple(self.redact_value(v) for v in obj)
 
@@ -300,9 +305,9 @@ class ISOFormatter(JsonFormatter):
 
     def add_fields(
         self,
-        log_record: dict[str, Any],
+        log_record: dict[str, JSONValue],
         record: logging.LogRecord,
-        message_dict: dict[str, Any],
+        message_dict: dict[str, JSONValue],
     ) -> None:
         """Add fields to the log record.
 
@@ -319,13 +324,13 @@ class ISOFormatter(JsonFormatter):
         self._copy_structured_fields(log_record, record, message_dict)
 
     @staticmethod
-    def _add_timestamp(log_record: dict[str, Any]) -> None:
+    def _add_timestamp(log_record: dict[str, JSONValue]) -> None:
         """Add ISO8601 timestamp if not present."""
         if "ts" not in log_record:
             log_record["ts"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
 
     @staticmethod
-    def _normalize_level(log_record: dict[str, Any], record: logging.LogRecord) -> None:
+    def _normalize_level(log_record: dict[str, JSONValue], record: logging.LogRecord) -> None:
         """Normalize the log level to lowercase."""
         lvl = (
             log_record.get("level")
@@ -341,15 +346,15 @@ class ISOFormatter(JsonFormatter):
             log_record["level"] = "info"
 
     @staticmethod
-    def _add_logger_name(log_record: dict[str, Any], record: logging.LogRecord) -> None:
+    def _add_logger_name(log_record: dict[str, JSONValue], record: logging.LogRecord) -> None:
         """Add logger name to the record."""
         log_record["logger"] = record.name
 
     def _copy_structured_fields(
         self,
-        log_record: dict[str, Any],
+        log_record: dict[str, JSONValue],
         record: logging.LogRecord,
-        message_dict: dict[str, Any],
+        message_dict: dict[str, JSONValue],
     ) -> None:
         """Copy structured fields from various sources."""
         with contextlib.suppress(Exception):
@@ -358,9 +363,9 @@ class ISOFormatter(JsonFormatter):
 
     def _copy_configured_fields(
         self,
-        log_record: dict[str, Any],
+        log_record: dict[str, JSONValue],
         record: logging.LogRecord,
-        message_dict: dict[str, Any],
+        message_dict: dict[str, JSONValue],
     ) -> None:
         """Copy configured structured fields."""
         for field_name in self.config.structured_log_fields:
@@ -369,7 +374,7 @@ class ISOFormatter(JsonFormatter):
                 log_record[field_name] = value
 
     @staticmethod
-    def _mirror_path_to_route(log_record: dict[str, Any]) -> None:
+    def _mirror_path_to_route(log_record: dict[str, JSONValue]) -> None:
         """Mirror path to route for stability."""
         if "route" not in log_record and "path" in log_record:
             log_record["route"] = log_record.get("path")
@@ -377,10 +382,10 @@ class ISOFormatter(JsonFormatter):
     @staticmethod
     def _get_field_value(
         field_name: str,
-        message_dict: dict[str, Any],
-        log_record: dict[str, Any],
+        message_dict: dict[str, JSONValue],
+        log_record: dict[str, JSONValue],
         record: logging.LogRecord,
-    ) -> Any:
+    ) -> JSONValue:
         """Get field value from various sources in priority order."""
         return (
             message_dict.get(field_name)
