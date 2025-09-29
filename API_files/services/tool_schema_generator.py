@@ -103,7 +103,12 @@ def generate_schema(func: Callable[..., Any]) -> dict[str, Any]:
 class ToolRegistry:
     """Simple tool registry stub for now."""
 
-    def get_tool_schemas(self, requested_tools: list[str] | None = None) -> list[dict[str, Any]]:
+    def __init__(self) -> None:
+        """Initialize an empty internal tool registry."""
+        self._tools: dict[str, Callable[..., Any]] = {}
+
+    @staticmethod
+    def get_tool_schemas(requested_tools: list[str] | None = None) -> list[dict[str, Any]]:
         """Return empty tool schemas for now."""
         return []
 

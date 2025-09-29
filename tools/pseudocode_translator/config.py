@@ -835,6 +835,15 @@ class ConfigManager:
 
     DEFAULT_CONFIG_PATH = Path.home() / ".pseudocode_translator" / "config.yaml"
 
+    def __init__(self) -> None:
+        """Initialize the configuration manager.
+
+        No state is required at construction time; methods are provided as
+        statics/classmethods for convenience, but having an explicit
+        constructor improves clarity and tooling compatibility.
+        """
+        # Intentionally no instance state
+
     @staticmethod
     def _truthy_env(name: str) -> bool:
         """Return True if the environment variable with the given name is truthy.

@@ -6,12 +6,17 @@ translation system without requiring actual model resources.
 """
 
 import logging
+import os
 import random
+import secrets
+
+# Ensure project root is in sys.path for absolute imports
+import sys
 import time
 from pathlib import Path
 from typing import Any
 
-from .base_model import (
+from tools.pseudocode_translator.models.base_model import (
     BaseTranslationModel,
     ModelCapabilities,
     ModelMetadata,
@@ -20,7 +25,12 @@ from .base_model import (
     TranslationResult,
     validate_instruction,
 )
-from .model_factory import ModelPriority, register_model
+from tools.pseudocode_translator.models.model_factory import (
+    ModelPriority,
+    register_model,
+)
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +58,14 @@ class MockModel(BaseTranslationModel):
         self.config.setdefault("error_rate", 0.0)
         self.config.setdefault("mock_style", "simple")
         self.config.setdefault("deterministic", True)
+
+        # RNG: secure for non-deterministic runs, deterministic for tests
+        # Deterministic mode uses a fixed seed for stable outputs
+        self._rng = (
+            self._rng = random.Random(secrets.randbits(128)) if self.config.get("deterministic", True) else secrets.SystemRandom()
+            if self.config.get("deterministic", True)
+            else secrets.SystemRandom()
+        )
 
         # Language templates for mock generation
         self.templates = {
@@ -117,6 +135,7 @@ class MockModel(BaseTranslationModel):
             model_path: Ignored for mock model
             **kwargs: Additional initialization parameters
         """
+        # Parameters are unused for the mock implementation
         logger.info("Initializing mock model")
 
         # Simulate initialization delay
@@ -131,7 +150,7 @@ class MockModel(BaseTranslationModel):
         instruction: str,
         config: TranslationConfig | None = None,
         context: dict[str, Any] | None = None,
-        **kwargs,  # Accept additional arguments gracefully
+        **_kwargs,  # Accept additional arguments gracefully
     ) -> TranslationResult:
         """
         Generate mock translation
@@ -156,7 +175,7 @@ class MockModel(BaseTranslationModel):
             time.sleep(self.config["delay_ms"] / 1000)
 
         # Simulate random errors
-        if self.config["error_rate"] > 0 and random.random() < self.config["error_rate"]:
+        if self.config["error_rate"] > 0 and self._rng.random() < self.config["error_rate"]:
             return TranslationResult(
                 success=False,
                 code=None,
@@ -168,7 +187,7 @@ class MockModel(BaseTranslationModel):
         code = self._generate_mock_code(instruction, config, context)
 
         # Calculate mock confidence
-        confidence = 0.95 if self.config["deterministic"] else random.uniform(0.7, 0.99)
+        confidence = 0.95 if self.config["deterministic"] else self._rng.uniform(0.7, 0.99)
 
         return TranslationResult(
             success=True,

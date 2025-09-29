@@ -19,8 +19,10 @@ Run:
 
 from __future__ import annotations
 
-import random
+import json
+import random  # nosec B311 - deterministic simulation only; not for cryptographic purposes
 import statistics
+import sys
 
 # Local import; no heavy deps
 from pseudocode_translator.streaming.adaptive import AdaptiveChunkSizer
@@ -41,7 +43,7 @@ def p95(values: list[float]) -> float:
 
 
 def simulate(flag: bool = True, seed: int = 1337) -> dict:
-    rnd = random.Random(seed)
+    rnd = random.Random(seed)  # nosec B311 - seeded for reproducibility
 
     # Controller configuration
     min_size = 200
@@ -56,14 +58,20 @@ def simulate(flag: bool = True, seed: int = 1337) -> dict:
     # Fake "environment" latency model:
     # Latency grows sublinearly with size plus noise.
     # Base at 350ms for 500 bytes; scale roughly by sqrt(size/500).
+    spike_prob = 0.05
+    noise_min = -30.0
+    noise_max = 30.0
+    spike_min = 1.5
+    spike_max = 2.0
+
     def latency_model(size: int) -> float:
         if size <= 0:
             return 5.0
         base = 350.0 * (size / 500.0) ** 0.5
-        noise = rnd.uniform(-30.0, 30.0)
+        noise = rnd.uniform(noise_min, noise_max)  # nosec B311 - simulation noise only
         # Add occasional spikes
-        if rnd.random() < 0.05:
-            base *= rnd.uniform(1.5, 2.0)
+        if rnd.random() < spike_prob:  # nosec B311 - simulation only
+            base *= rnd.uniform(spike_min, spike_max)  # nosec B311 - simulation only
         return max(1.0, base + noise)
 
     sizer = AdaptiveChunkSizer(
@@ -134,3 +142,9 @@ if __name__ == "__main__":
     # Print two summaries for quick comparison: adaptive on vs. off
     res_on = simulate(flag=True, seed=1337)
     res_off = simulate(flag=False, seed=1337)
+    print(
+        json.dumps(
+            {"adaptive_on": res_on, "adaptive_off": res_off},
+            indent=2,
+        )
+    )

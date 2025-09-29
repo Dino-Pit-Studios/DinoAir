@@ -4,13 +4,6 @@ DinoPit Studios Color Configuration
 Centralized color scheme for the DinoPit Studios GUI application.
 """
 
-from typing import TYPE_CHECKING
-
-from .scaling import get_scaling_helper
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
-
 
 class DinoPitColors:
     """Color constants for DinoPit Studios branding."""
@@ -45,26 +38,26 @@ class DinoPitColors:
         cls, element_type: str = "default", scale_factor: float | None = None
     ) -> str:
         """Get common stylesheets for different element types."""
-        scaling = get_scaling_helper()
-        _ = scale_factor  # reserved for future scaling support; avoids unused-argument warning
+        # scale_factor is currently unused; reserved for future responsive sizing
+        _ = scale_factor
 
         # Dictionary-based lookup eliminates long if-elif chain
-        stylesheets: dict[str, Callable[[], str]] = {
+        stylesheets = {
             "main_background": lambda: f"background-color: {cls.MAIN_BACKGROUND};",
             "header": lambda: f"""
                 background-color: {cls.DINOPIT_ORANGE};
-                border-bottom: {scaling.scaled_size(2)}px solid {cls.DINOPIT_FIRE};
+                border-bottom: 2px solid {cls.DINOPIT_FIRE};
                 color: {cls.PRIMARY_TEXT};
                 font-weight: bold;
-                font-size: {scaling.scaled_font_size(14)}px;
+                font-size: 14px;
             """,
             "panel": lambda: f"background-color: {cls.PANEL_BACKGROUND};",
             "input_field": lambda: f"""
                 QLineEdit {{
-                    border: {scaling.scaled_size(1)}px solid {cls.BORDER_COLOR};
-                    border-radius: {scaling.scaled_size(20)}px;
-                    padding: {scaling.scaled_size(8)}px {scaling.scaled_size(15)}px;
-                    font-size: {scaling.scaled_font_size(14)}px;
+                    border: 1px solid {cls.BORDER_COLOR};
+                    border-radius: 20px;
+                    padding: 8px 15px;
+                    font-size: 14px;
                     background-color: {cls.MAIN_BACKGROUND};
                     color: {cls.ACCENT_TEXT};
                 }}
@@ -77,8 +70,8 @@ class DinoPitColors:
                     background-color: {cls.DINOPIT_ORANGE};
                     color: {cls.PRIMARY_TEXT};
                     border: none;
-                    border-radius: {scaling.scaled_size(20)}px;
-                    font-size: {scaling.scaled_font_size(16)}px;
+                    border-radius: 20px;
+                    font-size: 16px;
                     font-weight: bold;
                 }}
                 QPushButton:hover {{

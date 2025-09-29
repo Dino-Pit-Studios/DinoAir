@@ -5,6 +5,7 @@ This module provides a Qwen 7B model implementation using llama-cpp-python.
 The model is optimized for code generation and instruction following.
 """
 
+import ast
 import logging
 from pathlib import Path
 from typing import Any
@@ -283,9 +284,10 @@ class QwenModel(BaseModel):
         # Remove any remaining markdown artifacts
         code = code.replace("```python", "").replace("```", "")
 
-        # Basic syntax validation
+        # Basic syntax validation using AST parsing.
+        # ast.parse() only checks syntax and does not execute code, making it safer for validating untrusted input than compile() or eval().
         try:
-            compile(code, "<generated>", "exec")
+            ast.parse(code, filename="<generated>")
         except SyntaxError as e:
             logger.warning("Generated code has syntax error: %s", e)
             # Try to fix common issues
