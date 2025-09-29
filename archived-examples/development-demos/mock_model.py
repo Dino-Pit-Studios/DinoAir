@@ -167,9 +167,6 @@ class MockModel(BaseTranslationModel):
             raise RuntimeError("Model not initialized")
 
         # Use default config if not provided
-        if config is None:
-            config = TranslationConfig()
-        # Help static analyzers understand config is not None beyond this point
         assert config is not None
 
         # Simulate processing delay
