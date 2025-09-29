@@ -12,6 +12,10 @@ import time
 from pathlib import Path
 from typing import Any
 
+# Ensure project root is in sys.path for absolute imports
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 from tools.pseudocode_translator.models.base_model import (
     BaseTranslationModel,
     ModelCapabilities,
