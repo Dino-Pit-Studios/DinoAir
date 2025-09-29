@@ -142,10 +142,9 @@ if __name__ == "__main__":
     # Print two summaries for quick comparison: adaptive on vs. off
     res_on = simulate(flag=True, seed=1337)
     res_off = simulate(flag=False, seed=1337)
-    sys.stdout.write(
+    print(
         json.dumps(
             {"adaptive_on": res_on, "adaptive_off": res_off},
             indent=2,
         )
-        + "\n"
     )
