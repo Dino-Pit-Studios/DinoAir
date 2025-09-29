@@ -284,7 +284,8 @@ class QwenModel(BaseModel):
         # Remove any remaining markdown artifacts
         code = code.replace("```python", "").replace("```", "")
 
-        # Basic syntax validation using AST parsing (safer than compile)
+        # Basic syntax validation using AST parsing.
+        # ast.parse() only checks syntax and does not execute code, making it safer for validating untrusted input than compile() or eval().
         try:
             ast.parse(code, filename="<generated>")
         except SyntaxError as e:
