@@ -105,8 +105,10 @@ class PerformanceMonitor:
         if not self.config.enabled:
             return False
         # Use a cryptographically secure RNG when sampling might gate security-sensitive telemetry
-        rng = secrets.SystemRandom()
-        return self.config.sampling_rate >= 1.0 or rng.random() < self.config.sampling_rate
+        if self.config.sampling_rate >= 1.0:
+            return True
+        # Use secrets.randbelow for efficient cryptographic sampling
+        return secrets.randbelow(10**6) < int(self.config.sampling_rate * 10**6)
 
     def _collect_system_metrics(self) -> dict[str, Any]:
         """Collect current system metrics."""
