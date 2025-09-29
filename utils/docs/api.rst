@@ -44,17 +44,11 @@ Utility Modules
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: utils.watchdog_health
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 .. automodule:: utils.optimization_utils
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: utils.scaling
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. note::
+   The legacy PySide6-backed watchdog and scaling modules have been removed.
